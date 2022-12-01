@@ -1,4 +1,4 @@
-package Tasks;
+package tasks;
 
 import java.util.Objects;
 
@@ -22,11 +22,11 @@ public class Task {
         this.id = id;
     }
 
-    public String getAllTasksName() {
+    public String getName() {
         return taskName;
     }
 
-    public void setTaskName(String taskName) {
+    public void setName(String taskName) {
         this.taskName = taskName;
     }
 

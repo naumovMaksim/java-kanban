@@ -1,20 +1,20 @@
-package Tasks;
+package tasks;
 
 import java.util.Objects;
 
 public class SubTask extends Task {
-    protected int subTuskID;
+    protected int subTuskId;
 
     public SubTask(String taskName, String description, Status taskStatus) {
         super(taskName, description, taskStatus);
     }
 
     public int getSubTuskId() {
-        return subTuskID;
+        return subTuskId;
     }
 
-    public void setSubTuskID(int subTuskID) {
-        this.subTuskID = subTuskID;
+    public void addSubTaskId(int subTuskId) {
+        this.subTuskId = subTuskId;
     }
 
     @Override
@@ -23,19 +23,18 @@ public class SubTask extends Task {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         SubTask subTask = (SubTask) o;
-        return subTuskID == subTask.subTuskID;
+        return subTuskId == subTask.subTuskId;
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(super.hashCode(), subTuskID);
+        return Objects.hash(super.hashCode(), subTuskId);
     }
 
     @Override
     public String toString() {
         return "SubTask{" +
-                "subTuskID=" + subTuskID +
+                "subTuskId=" + subTuskId +
                 ", id=" + id +
                 ", taskName='" + taskName + '\'' +
                 ", description='" + description + '\'' +

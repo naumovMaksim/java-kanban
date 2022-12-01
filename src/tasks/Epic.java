@@ -1,4 +1,4 @@
-package Tasks;
+package tasks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,20 +6,23 @@ import java.util.Objects;
 
 public class Epic extends Task {
 
-    protected List <Integer> subTuskIDs;
+    protected List<Integer> subTuskIds;
 
     public Epic(String taskName, String description, Status taskStatus) {
 
         super(taskName, description, taskStatus);
-        subTuskIDs = new ArrayList<>();
+        subTuskIds = new ArrayList<>();
     }
 
     public List<Integer> getSubTuskId() {
-        return subTuskIDs;
+        return subTuskIds;
     }
 
-    public void setSubTuskId(int subTaskId) {
-        subTuskIDs.add(subTaskId);
+    public void addSubTaskId(int subTaskId) {
+        subTuskIds.add(subTaskId);
+    }
+    public void clearSubTaskId(){
+        subTuskIds.clear();
     }
 
     @Override
@@ -28,18 +31,18 @@ public class Epic extends Task {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Epic epic = (Epic) o;
-        return Objects.equals(subTuskIDs, epic.subTuskIDs);
+        return Objects.equals(subTuskIds, epic.subTuskIds);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), subTuskIDs);
+        return Objects.hash(super.hashCode(), subTuskIds);
     }
 
     @Override
     public String toString() {
         String result = "Epic{" +
-                "subTuskIDs=" + subTuskIDs +
+                "subTuskIds=" + subTuskIds +
                 ", id=" + id +
                 ", taskName='" + taskName + '\'';
         if (description != null) {
