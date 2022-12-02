@@ -6,23 +6,23 @@ import java.util.Objects;
 
 public class Epic extends Task {
 
-    protected List<Integer> subTuskIds;
+    protected List<Integer> epicIds;
 
     public Epic(String taskName, String description, Status taskStatus) {
 
         super(taskName, description, taskStatus);
-        subTuskIds = new ArrayList<>();
+        epicIds = new ArrayList<>();
     }
 
-    public List<Integer> getSubTuskId() {
-        return subTuskIds;
+    public List<Integer> getEpicIds() {
+        return epicIds;
     }
 
     public void addSubTaskId(int subTaskId) {
-        subTuskIds.add(subTaskId);
+        epicIds.add(subTaskId);
     }
     public void clearSubTaskId(){
-        subTuskIds.clear();
+        epicIds.clear();
     }
 
     @Override
@@ -31,18 +31,18 @@ public class Epic extends Task {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Epic epic = (Epic) o;
-        return Objects.equals(subTuskIds, epic.subTuskIds);
+        return Objects.equals(epicIds, epic.epicIds);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), subTuskIds);
+        return Objects.hash(super.hashCode(), epicIds);
     }
 
     @Override
     public String toString() {
         String result = "Epic{" +
-                "subTuskIds=" + subTuskIds +
+                "epicIds=" + epicIds +
                 ", id=" + id +
                 ", taskName='" + taskName + '\'';
         if (description != null) {

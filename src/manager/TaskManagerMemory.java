@@ -7,7 +7,7 @@ import java.util.*;
 public class TaskManagerMemory implements TaskManager {
     HashMap <Integer, Task> tasksMemory = new HashMap<>();
     HashMap <Integer, Epic> epicsMemory = new HashMap<>();
-    HashMap <Integer, SubTask> subTusksMemory = new HashMap<>();
+    HashMap <Integer, SubTask> subTasksMemory = new HashMap<>();
     protected int id = 1;
 
     @Override
@@ -27,14 +27,15 @@ public class TaskManagerMemory implements TaskManager {
         }
     }
 
-    public void createSubTusk(SubTask subTask, int epicId){// Я не понимаю как сделать без передачи "epicId". Как тогда передать subTusk к какому epic он принадлежит? Очень долго пытался что то придумать, но безуспешно:(
-        Epic epic = epicsMemory.get(epicId);
-        if (subTask != null & epic != null) {
-            subTask.setId(epicId);
-            subTask.addSubTaskId(id++);
-            subTusksMemory.put(subTask.getSubTuskId(), subTask);
-            epic.addSubTaskId(subTask.getSubTuskId());
-            updateEpicStatus(epic);
+    public void createSubTask(SubTask subTask){
+        if (subTask != null) {
+            subTask.setId(id++);
+            subTasksMemory.put(subTask.getId(), subTask);
+            Epic epic = epicsMemory.get(subTask.getEpicId());
+            if (epic != null) {
+                epic.addSubTaskId(subTask.getId());
+                updateEpicStatus(epic);
+            }
         }
     }
 
@@ -49,13 +50,13 @@ public class TaskManagerMemory implements TaskManager {
     }
     
     @Override
-    public ArrayList<SubTask> getAllSubTusks(){
-        return new ArrayList<>(subTusksMemory.values());
+    public ArrayList<SubTask> getAllSubTasks(){
+        return new ArrayList<>(subTasksMemory.values());
     }
     
     @Override
-    public Task getTaskById(int tuskId){
-        return tasksMemory.get(tuskId);
+    public Task getTaskById(int taskId){
+        return tasksMemory.get(taskId);
     }
     
     @Override
@@ -64,14 +65,8 @@ public class TaskManagerMemory implements TaskManager {
     }
 
     @Override
-    public ArrayList<SubTask> getSubTask(int epicId){
-        Epic epic = epicsMemory.get(epicId);
-        ArrayList<SubTask> subTaskArrayList = new ArrayList<>();
-        List<Integer> sub = epic.getSubTuskId();
-        for (Integer i: sub){
-            subTaskArrayList.add(subTusksMemory.get(i));
-        }
-        return subTaskArrayList;
+    public SubTask getSubTaskById(int subTaskId){
+        return subTasksMemory.get(subTaskId);
     }
 
     @Override
@@ -87,13 +82,19 @@ public class TaskManagerMemory implements TaskManager {
     }
 
     @Override
-    public void updateSubTusk(SubTask subTask){
-        if (subTusksMemory.containsKey(subTask.getSubTuskId()) & epicsMemory.containsKey(subTask.getId())){
-            SubTask savedSubTusk = subTusksMemory.get(subTask.getSubTuskId());
-            savedSubTusk.setName(subTask.getName());
-            savedSubTusk.setDescription(subTask.getDescription());
-            updateEpicStatus(epicsMemory.get(subTask.getId()));
+    public void updateSubTask(SubTask subTask){
+        final int id = subTask.getId();
+        final int epicId = subTask.getEpicId();
+        final SubTask savedSubtask = subTasksMemory.get(id);
+        if (savedSubtask == null) {
+            return;
         }
+        final Epic epic = epicsMemory.get(epicId);
+        if (epic == null) {
+            return;
+        }
+        subTasksMemory.put(id, subTask);
+        updateEpicStatus(epic);
     }
 
     @Override
@@ -104,12 +105,12 @@ public class TaskManagerMemory implements TaskManager {
     @Override
     public void deleteAllEpics(){
         epicsMemory.clear();
-        subTusksMemory.clear();
+        subTasksMemory.clear();
     }
 
     @Override
-    public void deleteAllSubTusks(){
-        subTusksMemory.clear();
+    public void deleteAllSubTasks(){
+        subTasksMemory.clear();
         for (Epic epic: epicsMemory.values()){
             epic.clearSubTaskId();
             updateEpicStatus(epic);
@@ -117,29 +118,24 @@ public class TaskManagerMemory implements TaskManager {
     }
 
     @Override
-    public void deleteTaskById(int tId){
-        tasksMemory.remove(tId);
+    public void deleteTaskById(int taskId){
+        tasksMemory.remove(taskId);
     }
 
     @Override
-    public void deleteEpicById(int eId){
-        epicsMemory.remove(eId);
-        ArrayList<Integer> idDelSubTasks = new ArrayList<>();
-        for (SubTask subTask : subTusksMemory.values()){
-            if (subTask.getId() == eId) {
-                idDelSubTasks.add(subTask.getSubTuskId());
-            }
+    public void deleteEpicById(int epicId){
+        Epic epic = epicsMemory.get(epicId);
+        for (Integer subTaskId: epic.getEpicIds()) {
+            subTasksMemory.remove(subTaskId);
         }
-        for (Integer id: idDelSubTasks){
-            subTusksMemory.remove(id);
-        }
+        epicsMemory.remove(epicId);
     }
 
     @Override
-    public void deleteSubTaskById(Integer sId){
-        subTusksMemory.remove(sId);
+    public void deleteSubTaskById(Integer subTaskId){
+        subTasksMemory.remove(subTaskId);
         for (Epic epic: epicsMemory.values()) {
-            epic.getSubTuskId().remove(sId);
+            epic.getEpicIds().remove(subTaskId);
             updateEpicStatus(epic);
             epicsMemory.put(epic.getId(), epic);
         }
@@ -148,8 +144,8 @@ public class TaskManagerMemory implements TaskManager {
     @Override
     public ArrayList<SubTask> getAllSubTasksInEpic(Epic epic){
         ArrayList<SubTask> getAllSubTasksInEpic = new ArrayList<>();
-        for (int i: epic.getSubTuskId()){
-            SubTask subTask = subTusksMemory.get(i);
+        for (int i: epic.getEpicIds()){
+            SubTask subTask = subTasksMemory.get(i);
             getAllSubTasksInEpic.add(subTask);
         }
         return getAllSubTasksInEpic; 
@@ -160,8 +156,8 @@ public class TaskManagerMemory implements TaskManager {
         int counterDone = 0;
 
         Set<Status> statusSet = new HashSet<>();
-        for (int subId: epic.getSubTuskId()){
-            SubTask subTask = subTusksMemory.get(subId);
+        for (int subId: epic.getEpicIds()){
+            SubTask subTask = subTasksMemory.get(subId);
             Status status = subTask.getAllTasksStatus();
             statusSet.add(status);
             if (status.equals(Status.NEW)){
