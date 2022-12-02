@@ -28,14 +28,12 @@ public class TaskManagerMemory implements TaskManager {
     }
 
     public void createSubTask(SubTask subTask){
-        if (subTask != null) {
+        if (subTask != null & !epicsMemory.isEmpty()) {
             subTask.setId(id++);
             subTasksMemory.put(subTask.getId(), subTask);
             Epic epic = epicsMemory.get(subTask.getEpicId());
-            if (epic != null) {
-                epic.addSubTaskId(subTask.getId());
-                updateEpicStatus(epic);
-            }
+            epic.addSubTaskId(subTask.getId());
+            updateEpicStatus(epic);
         }
     }
 
