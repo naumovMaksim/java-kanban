@@ -1,10 +1,11 @@
-import manager.TaskManagerMemory;
+import manager.*;
 import tasks.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        TaskManagerMemory taskManagerMemory = new TaskManagerMemory();
+        TaskManager inMemoryTaskManager = Managers.getDefault();
+
         Task task = new Task("Ноутбук", "Купить новый ноутбук", Status.NEW);
         Task task1 = new Task("Квартира", "Купить новую квартиру", Status.NEW);
         Epic epic = new Epic("Продукты", "Купить продукты", Status.NEW);
@@ -15,40 +16,57 @@ public class Main {
                 , "Подготовить проект к 1 проверке", Status.NEW, 4);
         SubTask subTask2 = new SubTask("Пойти в магазин", "Купить все в магазине", Status.NEW, 3);
 
-        taskManagerMemory.createTask(task);
-        taskManagerMemory.createTask(task1);
-        taskManagerMemory.createEpic(epic);
-        taskManagerMemory.createEpic(epic1);
-        taskManagerMemory.createSubTask(subTask);
-        taskManagerMemory.createSubTask(subTask1);
-        taskManagerMemory.createSubTask(subTask2);
+        inMemoryTaskManager.createTask(task);
+        inMemoryTaskManager.createTask(task1);
+        inMemoryTaskManager.createEpic(epic);
+        inMemoryTaskManager.createEpic(epic1);
+        inMemoryTaskManager.createSubTask(subTask);
+        inMemoryTaskManager.createSubTask(subTask1);
+        inMemoryTaskManager.createSubTask(subTask2);
 
-        System.out.println("1 проверка: " + taskManagerMemory.getAllTasks() + "\n" + taskManagerMemory.getAllEpics()
-                + "\n" + taskManagerMemory.getAllSubTasks() + "\n");
+        System.out.println("1 проверка:" + "\n" + inMemoryTaskManager.getAllTasks() + "\n" + inMemoryTaskManager.getAllEpics()
+                + "\n" + inMemoryTaskManager.getAllSubTasks() + "\n");
 
         subTask.setTaskStatus(Status.DONE);
-        taskManagerMemory.updateSubTask(subTask);
+        inMemoryTaskManager.updateSubTask(subTask);
 
-        System.out.println("2 проверка: " + taskManagerMemory.getAllTasks() + "\n" + taskManagerMemory.getAllEpics()
-                + "\n" + taskManagerMemory.getAllSubTasks() + "\n");
+        System.out.println("2 проверка:" + "\n" + inMemoryTaskManager.getAllTasks() + "\n" + inMemoryTaskManager.getAllEpics()
+                + "\n" + inMemoryTaskManager.getAllSubTasks() + "\n");
 
         subTask2.setTaskStatus(Status.DONE);
-        taskManagerMemory.updateSubTask(subTask);
+        inMemoryTaskManager.updateSubTask(subTask);
         subTask1.setTaskStatus(Status.DONE);
-        taskManagerMemory.updateSubTask(subTask1);
+        inMemoryTaskManager.updateSubTask(subTask1);
 
-        System.out.println("3 проверка: " + taskManagerMemory.getAllTasks() + "\n" + taskManagerMemory.getAllEpics()
-                + "\n" + taskManagerMemory.getAllSubTasks()  + "\n");
+        System.out.println("3 проверка:" + "\n" + inMemoryTaskManager.getAllTasks() + "\n" + inMemoryTaskManager.getAllEpics()
+                + "\n" + inMemoryTaskManager.getAllSubTasks()  + "\n");
 
-//        taskManagerMemory.deleteAllTasks();
-//        taskManagerMemory.deleteAllEpics();
-//        taskManagerMemory.deleteAllSubTasks();
-       taskManagerMemory.deleteTaskById(1);
-       taskManagerMemory.deleteEpicById(4);
-       taskManagerMemory.deleteSubTaskById(7);
+/*        inMemoryTaskManager.deleteAllTasks();
+        inMemoryTaskManager.deleteAllEpics();
+        inMemoryTaskManager.deleteAllSubTasks();
+        inMemoryTaskManager.deleteTaskById(1);
+        inMemoryTaskManager.deleteEpicById(4);
+        inMemoryTaskManager.deleteSubTaskById(7);
 
-        System.out.println("4 проверка: " + taskManagerMemory.getAllTasks() + "\n" + taskManagerMemory.getAllEpics()
-                + "\n" + taskManagerMemory.getAllSubTasks()+ "\n");
-        System.out.println(taskManagerMemory.getAllSubTasksInEpic(epic));
+        System.out.println("4 проверка: " + inMemoryTaskManager.getAllTasks() + "\n" + inMemoryTaskManager.getAllEpics()
+                + "\n" + inMemoryTaskManager.getAllSubTasks()+ "\n");
+        System.out.println(inMemoryTaskManager.getAllSubTasksInEpic(epic) + "\n");*/
+
+        inMemoryTaskManager.getTaskById(1);//1
+        inMemoryTaskManager.getTaskById(2);//2
+        inMemoryTaskManager.getEpicById(3);//3
+        inMemoryTaskManager.getEpicById(4);//4
+        inMemoryTaskManager.getSubTaskById(5);//5
+
+        System.out.println("1 Проверка вывода истории:" + "\n" + inMemoryTaskManager.getHistory() + "\n");
+
+        inMemoryTaskManager.getSubTaskById(6);//6
+        inMemoryTaskManager.getSubTaskById(7);//7
+        inMemoryTaskManager.getTaskById(2);//8
+        inMemoryTaskManager.getEpicById(4);//9
+        inMemoryTaskManager.getSubTaskById(5);//10
+        inMemoryTaskManager.getTaskById(1);//11
+
+        System.out.println("2 Проверка вывода истории:" + "\n" + inMemoryTaskManager.getHistory());
     }
 }
