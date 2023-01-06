@@ -13,7 +13,7 @@ public class Main {
         SubTask subTask = new SubTask("Составить список"
                 , "Добавить в список все продукты", Status.NEW, 3);
         SubTask subTask1 = new SubTask("Изучить теорию"
-                , "Подготовить проект к 1 проверке", Status.NEW, 4);
+                , "Подготовить проект к 1 проверке", Status.NEW, 3);
         SubTask subTask2 = new SubTask("Пойти в магазин", "Купить все в магазине", Status.NEW, 3);
 
         inMemoryTaskManager.createTask(task);
@@ -60,13 +60,26 @@ public class Main {
 
         System.out.println("1 Проверка вывода истории:" + "\n" + inMemoryTaskManager.getHistory() + "\n");
 
-        inMemoryTaskManager.getSubTaskById(6);//6
-        inMemoryTaskManager.getSubTaskById(7);//7
-        inMemoryTaskManager.getTaskById(2);//8
-        inMemoryTaskManager.getEpicById(4);//9
-        inMemoryTaskManager.getSubTaskById(5);//10
-        inMemoryTaskManager.getTaskById(1);//11
+        inMemoryTaskManager.getTaskById(1);//1
+        inMemoryTaskManager.getTaskById(2);//2
+        inMemoryTaskManager.getEpicById(3);//3
+        inMemoryTaskManager.getEpicById(4);//4
+        inMemoryTaskManager.getSubTaskById(5);//5
+        inMemoryTaskManager.getSubTaskById(6);//5
+        inMemoryTaskManager.getSubTaskById(7);//5
 
-        System.out.println("2 Проверка вывода истории:" + "\n" + inMemoryTaskManager.getHistory());
+        System.out.println("2 Проверка вывода истории:" + "\n" + inMemoryTaskManager.getHistory() + "\n");
+
+        inMemoryTaskManager.deleteTaskById(1);
+        inMemoryTaskManager.deleteTaskById(2);
+        inMemoryTaskManager.deleteSubTaskById(5);
+
+        System.out.println("3 Проверка вывода истории:" + "\n" + inMemoryTaskManager.getHistory() + "\n");
+
+        inMemoryTaskManager.deleteEpicById(3);
+
+        System.out.println("4 Проверка вывода истории:" + "\n" + inMemoryTaskManager.getHistory());
+
+
     }
 }
