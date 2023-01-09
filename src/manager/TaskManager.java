@@ -2,16 +2,15 @@ package manager;
 
 import tasks.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
     void createTask(Task task);
     void createEpic(Epic epic);
     void createSubTask(SubTask subTask);
-    ArrayList<Task> getAllTasks();
-    ArrayList<Epic> getAllEpics();
-    ArrayList<SubTask> getAllSubTasks();
+    List<Task> getAllTasks();
+    List<Epic> getAllEpics();
+    List<SubTask> getAllSubTasks();
     Task getTaskById(int taskId);
     Epic getEpicById(int epicId);
     SubTask getSubTaskById(int subTaskId);
@@ -24,6 +23,6 @@ public interface TaskManager {
     void deleteTaskById(int taskId);
     void deleteEpicById(int epicId);
     void deleteSubTaskById(Integer subTaskId);
-    ArrayList<SubTask> getAllSubTasksInEpic(Epic epic);
+    List<SubTask> getAllSubTasksInEpic(Epic epic);
     List<Task> getHistory();
 }
