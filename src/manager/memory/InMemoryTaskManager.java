@@ -6,12 +6,12 @@ import tasks.*;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    HistoryManager historyManager = Managers.getDefaultHistory();
+    final private HistoryManager historyManager = Managers.getDefaultHistory();
 
-    final Map <Integer, Task> tasksMemory = new HashMap<>();
-    final Map <Integer, Epic> epicsMemory = new HashMap<>();
-    final Map <Integer, SubTask> subTasksMemory = new HashMap<>();
-    protected int id = 1;
+    final private Map <Integer, Task> tasksMemory = new HashMap<>();
+    final private Map <Integer, Epic> epicsMemory = new HashMap<>();
+    final private Map <Integer, SubTask> subTasksMemory = new HashMap<>();
+    private int id = 1;
 
     @Override
     public void createTask(Task task){
@@ -164,7 +164,7 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
-    protected void updateEpicStatus(Epic epic){
+    private void updateEpicStatus(Epic epic){
         int counterNew = 0;
         int counterDone = 0;
 
