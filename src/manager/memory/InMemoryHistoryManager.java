@@ -1,6 +1,6 @@
 package manager.memory;
 
-import manager.HistoryManager;
+import manager.interfaces.HistoryManager;
 import tasks.*;
 
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-        private final Map<Integer, Node> historyMap = new HashMap<>();
+    private final Map<Integer, Node> historyMap = new HashMap<>();
         private Node first;
         private Node last;
 

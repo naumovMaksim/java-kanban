@@ -1,6 +1,8 @@
 package manager;
 
 import manager.memory.*;
+import manager.interfaces.HistoryManager;
+import manager.interfaces.TaskManager;
 
 
 public class Managers {

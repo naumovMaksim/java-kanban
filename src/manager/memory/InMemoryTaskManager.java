@@ -1,7 +1,10 @@
 package manager.memory;
 
 import manager.*;
+import manager.interfaces.HistoryManager;
+import manager.interfaces.TaskManager;
 import tasks.*;
+import tasks.enums.StatusTypeEnum;
 
 import java.util.*;
 
@@ -164,33 +167,37 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
+    protected HistoryManager getHistoryManager(){
+        return historyManager;
+    }
+
     private void updateEpicStatus(Epic epic){
         int counterNew = 0;
         int counterDone = 0;
 
-        Set<Status> statusSet = new HashSet<>();
+        Set<StatusTypeEnum> statusTypeEnumSet = new HashSet<>();
         for (int subId: epic.getEpicIds()){
             SubTask subTask = subTasksMemory.get(subId);
-            Status status = subTask.getAllTasksStatus();
-            statusSet.add(status);
-            if (status.equals(Status.NEW)){
+            StatusTypeEnum statusTypeEnum = subTask.getAllTasksStatus();
+            statusTypeEnumSet.add(statusTypeEnum);
+            if (statusTypeEnum.equals(StatusTypeEnum.NEW)){
                 counterNew++;
-            } else if (status.equals(Status.DONE)){
+            } else if (statusTypeEnum.equals(StatusTypeEnum.DONE)){
                 counterDone++;
             }
         }
-        if (statusSet.isEmpty()){
-            epic.setTaskStatus(Status.NEW);
+        if (statusTypeEnumSet.isEmpty()){
+            epic.setTaskStatus(StatusTypeEnum.NEW);
             return;
         }
-        if(statusSet.contains(Status.NEW) & statusSet.size() <= counterNew){
-            epic.setTaskStatus(Status.NEW);
+        if(statusTypeEnumSet.contains(StatusTypeEnum.NEW) & statusTypeEnumSet.size() <= counterNew){
+            epic.setTaskStatus(StatusTypeEnum.NEW);
             return;
         }
-        if (statusSet.contains(Status.DONE) & statusSet.size() <= counterDone){
-            epic.setTaskStatus(Status.DONE);
+        if (statusTypeEnumSet.contains(StatusTypeEnum.DONE) & statusTypeEnumSet.size() <= counterDone){
+            epic.setTaskStatus(StatusTypeEnum.DONE);
             return;
         }
-        epic.setTaskStatus(Status.IN_PROGRESS);
+        epic.setTaskStatus(StatusTypeEnum.IN_PROGRESS);
     }
 }

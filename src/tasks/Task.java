@@ -1,17 +1,22 @@
 package tasks;
 
+import tasks.enums.StatusTypeEnum;
+import tasks.enums.TaskTypeEnum;
+
 import java.util.Objects;
 
 public class Task {
     protected int id;
     protected String taskName;
+    protected TaskTypeEnum taskTypeEnum;
     protected String description;
-    protected Status taskStatus;
+    protected StatusTypeEnum taskStatusTypeEnum;
 
-    public Task(String taskName, String description, Status taskStatus) {
+    public Task(String taskName, TaskTypeEnum taskTypeEnum, String description, StatusTypeEnum taskStatusTypeEnum) {
         this.taskName = taskName;
+        this.taskTypeEnum = taskTypeEnum;
         this.description = description;
-        this.taskStatus = taskStatus;
+        this.taskStatusTypeEnum = taskStatusTypeEnum;
     }
 
     public int getId() {
@@ -30,6 +35,10 @@ public class Task {
         this.taskName = taskName;
     }
 
+    public TaskTypeEnum getTaskTypeEnum() {
+        return taskTypeEnum;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -38,12 +47,12 @@ public class Task {
         this.description = description;
     }
 
-    public Status getAllTasksStatus() {
-        return taskStatus;
+    public StatusTypeEnum getAllTasksStatus() {
+        return taskStatusTypeEnum;
     }
 
-    public void setTaskStatus(Status taskStatus) {
-        this.taskStatus = taskStatus;
+    public void setTaskStatus(StatusTypeEnum taskStatusTypeEnum) {
+        this.taskStatusTypeEnum = taskStatusTypeEnum;
     }
 
     @Override
@@ -51,13 +60,13 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return id == task.id & Objects.equals(taskName, task.taskName) & taskStatus == task.taskStatus
+        return id == task.id & Objects.equals(taskName, task.taskName) & taskStatusTypeEnum == task.taskStatusTypeEnum
                 & Objects.equals(description, task.description);
     }
 
     @Override
     public int hashCode(){
-        return Objects.hash(id, taskName, taskStatus, description);
+        return Objects.hash(id, taskName, taskStatusTypeEnum, description);
     }
 
     @Override
@@ -68,7 +77,7 @@ public class Task {
         if (description != null) {
             result = result + ", description.length='" + description.length() + '\'';
         } else result = result + ", description.length=null";
-        result = result + ", taskStatus=" + taskStatus + '}';
+        result = result + ", taskStatus=" + taskStatusTypeEnum + '}';
         return result;
     }
 }

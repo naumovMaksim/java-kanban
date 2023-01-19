@@ -1,5 +1,8 @@
 package tasks;
 
+import tasks.enums.StatusTypeEnum;
+import tasks.enums.TaskTypeEnum;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -8,9 +11,9 @@ public class Epic extends Task {
 
     protected List<Integer> epicIds;
 
-    public Epic(String taskName, String description, Status taskStatus) {
+    public Epic(String taskName, TaskTypeEnum taskTypeEnum, String description, StatusTypeEnum taskStatusTypeEnum) {
 
-        super(taskName, description, taskStatus);
+        super(taskName, taskTypeEnum,description, taskStatusTypeEnum);
         epicIds = new ArrayList<>();
     }
 
@@ -48,7 +51,7 @@ public class Epic extends Task {
         if (description != null) {
             result = result + ", description.length='" + description.length() + '\'';
         } else result = result + ", description.length='null'";
-        result = result + ", taskStatus=" + taskStatus + '}';
+        result = result + ", taskStatus=" + taskStatusTypeEnum + '}';
         return result;
     }
 }

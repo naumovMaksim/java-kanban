@@ -1,20 +1,24 @@
 import manager.*;
+import manager.interfaces.TaskManager;
 import tasks.*;
+import tasks.enums.StatusTypeEnum;
+import tasks.enums.TaskTypeEnum;
 
 public class Main {
 
     public static void main(String[] args) {
         TaskManager inMemoryTaskManager = Managers.getDefault();
 
-        Task task = new Task("Ноутбук", "Купить новый ноутбук", Status.NEW);
-        Task task1 = new Task("Квартира", "Купить новую квартиру", Status.NEW);
-        Epic epic = new Epic("Продукты", "Купить продукты", Status.NEW);
-        Epic epic1 = new Epic("Проект", "Сделать проект", Status.NEW);
+        Task task = new Task("Ноутбук", TaskTypeEnum.TASK, "Купить новый ноутбук", StatusTypeEnum.NEW);
+        Task task1 = new Task("Квартира", TaskTypeEnum.TASK,"Купить новую квартиру", StatusTypeEnum.NEW);
+        Epic epic = new Epic("Продукты", TaskTypeEnum.EPIC, "Купить продукты", StatusTypeEnum.NEW);
+        Epic epic1 = new Epic("Проект", TaskTypeEnum.EPIC, "Сделать проект", StatusTypeEnum.NEW);
         SubTask subTask = new SubTask("Составить список"
-                , "Добавить в список все продукты", Status.NEW, 3);
+                , TaskTypeEnum.SUB_TASK, "Добавить в список все продукты", StatusTypeEnum.NEW, 3);
         SubTask subTask1 = new SubTask("Изучить теорию"
-                , "Подготовить проект к 1 проверке", Status.NEW, 3);
-        SubTask subTask2 = new SubTask("Пойти в магазин", "Купить все в магазине", Status.NEW, 3);
+                , TaskTypeEnum.SUB_TASK,"Подготовить проект к 1 проверке", StatusTypeEnum.NEW, 3);
+        SubTask subTask2 = new SubTask("Пойти в магазин", TaskTypeEnum.SUB_TASK,
+                "Купить все в магазине", StatusTypeEnum.NEW, 3);
 
         inMemoryTaskManager.createTask(task);
         inMemoryTaskManager.createTask(task1);
@@ -27,15 +31,15 @@ public class Main {
         System.out.println("1 проверка:" + "\n" + inMemoryTaskManager.getAllTasks() + "\n" + inMemoryTaskManager.getAllEpics()
                 + "\n" + inMemoryTaskManager.getAllSubTasks() + "\n");
 
-        subTask.setTaskStatus(Status.DONE);
+        subTask.setTaskStatus(StatusTypeEnum.DONE);
         inMemoryTaskManager.updateSubTask(subTask);
 
         System.out.println("2 проверка:" + "\n" + inMemoryTaskManager.getAllTasks() + "\n" + inMemoryTaskManager.getAllEpics()
                 + "\n" + inMemoryTaskManager.getAllSubTasks() + "\n");
 
-        subTask2.setTaskStatus(Status.DONE);
+        subTask2.setTaskStatus(StatusTypeEnum.DONE);
         inMemoryTaskManager.updateSubTask(subTask);
-        subTask1.setTaskStatus(Status.DONE);
+        subTask1.setTaskStatus(StatusTypeEnum.DONE);
         inMemoryTaskManager.updateSubTask(subTask1);
 
         System.out.println("3 проверка:" + "\n" + inMemoryTaskManager.getAllTasks() + "\n" + inMemoryTaskManager.getAllEpics()
