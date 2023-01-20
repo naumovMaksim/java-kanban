@@ -7,6 +7,6 @@ public class ManagerSaveException extends RuntimeException {
 
     @Override
     public String getMessage(){
-        return super.getMessage();
+        return "Файл не найден" + super.getMessage();
     }
 }

@@ -1,0 +1,6 @@
+id,type,name,status,description,epic
+1,TASK,Практикум,NEW,Изучить Java, 
+2,EPIC,Квартира,NEW,Купить квартиру, 
+3,SUB_TASK,Получить нужные документы,NEW,Сходить в МФЦ,2
+
+1,2,3

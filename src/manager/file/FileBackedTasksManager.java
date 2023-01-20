@@ -10,20 +10,18 @@ import tasks.Task;
 import tasks.enums.StatusTypeEnum;
 import tasks.enums.TaskTypeEnum;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 
 
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
 
-    public static void main(String[] args) {
-        File file1 = new File("src/manager/file/testReport.csv");
-        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file1);
+    public static void main(String[] args) throws IOException {
+        File fileUpload = new File("src/manager/file/testReport.csv");
+        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(fileUpload);
 
         fileBackedTasksManager.createTask(new Task("Ноутбук", TaskTypeEnum.TASK,
                 "Купить новый ноутбук", StatusTypeEnum.NEW));
@@ -36,7 +34,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         fileBackedTasksManager.getEpicById(2);
         fileBackedTasksManager.getSubTaskById(3);
 
+        System.out.println("Проверка записи в файл: " + "\n" + Files.readString(Path.of("src/manager/file/testReport.csv")) + "\n");
 
+        File fileLoadTest = new File("src/manager/file/testLoadReport.csv");
+        FileBackedTasksManager fileBackedTasksManager2 = loadFromFile(fileLoadTest);
+
+        System.out.println("Проверка считывания из файла:" + "\n" + "История: " + fileBackedTasksManager2.getHistory() + "\n");
+        System.out.println(fileBackedTasksManager2.getAllTasks() + "\n" + fileBackedTasksManager2.getAllEpics() + "\n" +
+                fileBackedTasksManager2.getAllSubTasks());
     }
 
     private final File file;
@@ -90,29 +95,33 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         String name;
         StatusTypeEnum status;
         String description;
-        String subtaskEpicId;
 
         String[] line = result.split(",");
-        id = Integer.parseInt(line[0]);
-        taskType = TaskTypeEnum.valueOf(line[1]);
-        name = line[2];
-        status = StatusTypeEnum.valueOf(line[3]);
-        description = line[4];
+        if (line[1].equals("TASK") || line[1].equals("EPIC") || line[1].equals("SUB_TASK")) {
+            id = Integer.parseInt(line[0]);
+            taskType = TaskTypeEnum.valueOf(line[1]);
+            name = line[2];
+            status = StatusTypeEnum.valueOf(line[3]);
+            description = line[4];
 
-        switch (taskType){
-            case EPIC:
-                Epic epic = new Epic(name, taskType, description, status);
-                epic.setId(id);
-                return epic;
-            case TASK:
-                Task task = new Task(name, taskType, description, status);
-                task.setId(id);
-                return task;
-            case SUB_TASK:
-                SubTask subTask = new SubTask(name, taskType, description, status, Integer.parseInt(line[5]));
-                subTask.setId(id);
-                return subTask;
-        }
+            switch (taskType) {
+                case EPIC:
+                    Epic epic = new Epic(name, taskType, description, status);
+                    epic.setId(id);
+                    createEpic(epic);
+                    return epic;
+                case TASK:
+                    Task task = new Task(name, taskType, description, status);
+                    task.setId(id);
+                    createTask(task);
+                    return task;
+                case SUB_TASK:
+                    SubTask subTask = new SubTask(name, taskType, description, status, Integer.parseInt(line[5]));
+                    subTask.setId(id);
+                    createSubTask(subTask);
+                    return subTask;
+                }
+            }
         return null;
     }
 
@@ -121,6 +130,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
             StringBuilder line = new StringBuilder();
             for (Task task : historyManager.getHistory()){
                 line.append(task.getId()).append(",");
+            }
+            if (line.length() != 0){
+                line.deleteCharAt(line.length() - 1);
             }
             return line.toString();
         }
@@ -137,6 +149,33 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         return history;
         }
         return null;
+    }
+
+    public static FileBackedTasksManager loadFromFile(File file){
+        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
+        try (BufferedReader br = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))){
+            while (br.ready()){
+                String line = br.readLine();
+                if (line.equals("")) {
+                    String lines = br.readLine();
+                    for (int id : Objects.requireNonNull(historyFromString(lines))) {
+                        if (fileBackedTasksManager.getTaskById(id) != null) {
+                            fileBackedTasksManager.getTaskById(id);
+                        } else if (fileBackedTasksManager.getEpicById(id) != null) {
+                            fileBackedTasksManager.getEpicById(id);
+                        } else if (fileBackedTasksManager.getSubTaskById(id) != null) {
+                            fileBackedTasksManager.getSubTaskById(id);
+                        }
+                    }
+                }
+                if(!line.equals("")) {
+                    fileBackedTasksManager.fromString(line);
+                }
+            }
+            return fileBackedTasksManager;
+        } catch (IOException e){
+            throw new ManagerSaveException(e.getMessage());
+        }
     }
 
     @Override
@@ -260,10 +299,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         return subTaskList;
     }
 
-//     @Override
-//    public HistoryManager getHistory() {
-//        HistoryManager historyManager = super.getHistory();
-//        save();
-//        return historyManager;
-//    }
+    @Override
+    public List<Task> getHistory() {
+        List<Task> historyManager = super.getHistory();
+        save();
+        return historyManager;
+    }
 }
