@@ -5,9 +5,9 @@ import tasks.*;
 import java.util.List;
 
 public interface TaskManager {
-    void createTask(Task task);
-    void createEpic(Epic epic);
-    void createSubTask(SubTask subTask);
+    int createTask(Task task);
+    int createEpic(Epic epic);
+    int createSubTask(SubTask subTask);
     List<Task> getAllTasks();
     List<Epic> getAllEpics();
     List<SubTask> getAllSubTasks();

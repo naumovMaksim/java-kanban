@@ -11,37 +11,46 @@ import java.util.*;
 public class InMemoryTaskManager implements TaskManager {
     final private HistoryManager historyManager = Managers.getDefaultHistory();
 
-    final private Map<Integer, Task> tasksMemory = new HashMap<>();
-    final private Map<Integer, Epic> epicsMemory = new HashMap<>();
-    final private Map<Integer, SubTask> subTasksMemory = new HashMap<>();
-    private int id = 1;
+    protected final Map<Integer, Task> tasksMemory = new HashMap<>();
+    protected final Map<Integer, Epic> epicsMemory = new HashMap<>();
+    protected final Map<Integer, SubTask> subTasksMemory = new HashMap<>();
+    protected int id = 1;
 
     @Override
-    public void createTask(Task task) {
+    public int createTask(Task task) {
+        int taskId = -1;
         if (task != null) {
-            task.setId(id++);
+            taskId = id++;
+            task.setId(taskId);
             tasksMemory.put(task.getId(), task);
         }
+        return taskId;
     }
 
     @Override
-    public void createEpic(Epic epic) {
+    public int createEpic(Epic epic) {
+        int epicId = -1;
         if (epic != null) {
-            epic.setId(id++);
+            epicId = id++;
+            epic.setId(epicId);
             updateEpicStatus(epic);
             epicsMemory.put(epic.getId(), epic);
         }
+        return epicId;
     }
 
     @Override
-    public void createSubTask(SubTask subTask) {
+    public int createSubTask(SubTask subTask) {
+        int subtaskId = -1;
         if (subTask != null & !epicsMemory.isEmpty()) {
-            subTask.setId(id++);
+            subtaskId = id++;
+            subTask.setId(subtaskId);
             subTasksMemory.put(subTask.getId(), subTask);
             Epic epic = epicsMemory.get(subTask.getEpicId());
             epic.addSubTaskId(subTask.getId());
             updateEpicStatus(epic);
         }
+        return subtaskId;
     }
 
     @Override
@@ -200,5 +209,32 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
         epic.setTaskStatus(StatusTypeEnum.IN_PROGRESS);
+    }
+
+    protected void addAnyTask(Task task) {
+        final int id = task.getId();
+        switch (task.getType()) {
+            case TASK:
+                tasksMemory.put(id, task);
+                break;
+            case SUB_TASK:
+                subTasksMemory.put(id, (SubTask) task);
+                break;
+            case EPIC:
+                epicsMemory.put(id, (Epic) task);
+                break;
+        }
+    }
+
+    protected Task findTask(Integer id) {
+        final Task task = tasksMemory.get(id);
+        if (task != null) {
+            return task;
+        }
+        final SubTask subtask = subTasksMemory.get(id);
+        if (subtask != null) {
+            return subtask;
+        }
+        return epicsMemory.get(id);
     }
 }
