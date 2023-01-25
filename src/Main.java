@@ -2,22 +2,22 @@ import manager.*;
 import manager.interfaces.TaskManager;
 import tasks.*;
 import tasks.enums.StatusTypeEnum;
-import tasks.enums.TaskTypeEnum;
+import tasks.enums.type;
 
 public class Main {
 
     public static void main(String[] args) {
         TaskManager inMemoryTaskManager = Managers.getDefault();
 
-        Task task = new Task("Ноутбук", TaskTypeEnum.TASK, "Купить новый ноутбук", StatusTypeEnum.NEW);
-        Task task1 = new Task("Квартира", TaskTypeEnum.TASK,"Купить новую квартиру", StatusTypeEnum.NEW);
-        Epic epic = new Epic("Продукты", TaskTypeEnum.EPIC, "Купить продукты", StatusTypeEnum.NEW);
-        Epic epic1 = new Epic("Проект", TaskTypeEnum.EPIC, "Сделать проект", StatusTypeEnum.NEW);
+        Task task = new Task("Ноутбук", type.TASK, "Купить новый ноутбук", StatusTypeEnum.NEW);
+        Task task1 = new Task("Квартира", type.TASK,"Купить новую квартиру", StatusTypeEnum.NEW);
+        Epic epic = new Epic("Продукты", type.EPIC, "Купить продукты", StatusTypeEnum.NEW);
+        Epic epic1 = new Epic("Проект", type.EPIC, "Сделать проект", StatusTypeEnum.NEW);
         SubTask subTask = new SubTask("Составить список"
-                , TaskTypeEnum.SUB_TASK, "Добавить в список все продукты", StatusTypeEnum.NEW, 3);
+                , type.SUB_TASK, "Добавить в список все продукты", StatusTypeEnum.NEW, 3);
         SubTask subTask1 = new SubTask("Изучить теорию"
-                , TaskTypeEnum.SUB_TASK,"Подготовить проект к 1 проверке", StatusTypeEnum.NEW, 3);
-        SubTask subTask2 = new SubTask("Пойти в магазин", TaskTypeEnum.SUB_TASK,
+                , type.SUB_TASK,"Подготовить проект к 1 проверке", StatusTypeEnum.NEW, 3);
+        SubTask subTask2 = new SubTask("Пойти в магазин", type.SUB_TASK,
                 "Купить все в магазине", StatusTypeEnum.NEW, 3);
 
         inMemoryTaskManager.createTask(task);

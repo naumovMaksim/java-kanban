@@ -1,7 +1,7 @@
 package tasks;
 
 import tasks.enums.StatusTypeEnum;
-import tasks.enums.TaskTypeEnum;
+import tasks.enums.type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,23 +9,24 @@ import java.util.Objects;
 
 public class Epic extends Task {
 
-    protected List<Integer> epicIds;
+    protected List<Integer> subtaskIds;
 
-    public Epic(String taskName, TaskTypeEnum taskTypeEnum, String description, StatusTypeEnum taskStatusTypeEnum) {
+    public Epic(String name, type type, String description, StatusTypeEnum status) {
 
-        super(taskName, taskTypeEnum,description, taskStatusTypeEnum);
-        epicIds = new ArrayList<>();
+        super(name, type, description, status);
+        subtaskIds = new ArrayList<>();
     }
 
-    public List<Integer> getEpicIds() {
-        return epicIds;
+    public List<Integer> getSubtaskIds() {
+        return subtaskIds;
     }
 
     public void addSubTaskId(int subTaskId) {
-        epicIds.add(subTaskId);
+        subtaskIds.add(subTaskId);
     }
-    public void clearSubTaskId(){
-        epicIds.clear();
+
+    public void clearSubTaskId() {
+        subtaskIds.clear();
     }
 
     @Override
@@ -34,24 +35,24 @@ public class Epic extends Task {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Epic epic = (Epic) o;
-        return Objects.equals(epicIds, epic.epicIds);
+        return Objects.equals(subtaskIds, epic.subtaskIds);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), epicIds);
+        return Objects.hash(super.hashCode(), subtaskIds);
     }
 
     @Override
     public String toString() {
         String result = "Epic{" +
-                "epicIds=" + epicIds +
+                "subtaskIds=" + subtaskIds +
                 ", id=" + id +
-                ", taskName='" + taskName + '\'';
+                ", name='" + name + '\'';
         if (description != null) {
             result = result + ", description.length='" + description.length() + '\'';
         } else result = result + ", description.length='null'";
-        result = result + ", taskStatus=" + taskStatusTypeEnum + '}';
+        result = result + ", taskStatus=" + status + '}';
         return result;
     }
 }

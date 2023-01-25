@@ -1,22 +1,22 @@
 package tasks;
 
 import tasks.enums.StatusTypeEnum;
-import tasks.enums.TaskTypeEnum;
+import tasks.enums.type;
 
 import java.util.Objects;
 
 public class Task {
     protected int id;
-    protected String taskName;
-    protected TaskTypeEnum taskTypeEnum;
+    protected String name;
+    protected type type;
     protected String description;
-    protected StatusTypeEnum taskStatusTypeEnum;
+    protected StatusTypeEnum status;
 
-    public Task(String taskName, TaskTypeEnum taskTypeEnum, String description, StatusTypeEnum taskStatusTypeEnum) {
-        this.taskName = taskName;
-        this.taskTypeEnum = taskTypeEnum;
+    public Task(String name, type type, String description, StatusTypeEnum status) {
+        this.name = name;
+        this.type = type;
         this.description = description;
-        this.taskStatusTypeEnum = taskStatusTypeEnum;
+        this.status = status;
     }
 
     public int getId() {
@@ -28,15 +28,15 @@ public class Task {
     }
 
     public String getName() {
-        return taskName;
+        return name;
     }
 
-    public void setName(String taskName) {
-        this.taskName = taskName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public TaskTypeEnum getTaskTypeEnum() {
-        return taskTypeEnum;
+    public type getType() {
+        return type;
     }
 
     public String getDescription() {
@@ -48,36 +48,36 @@ public class Task {
     }
 
     public StatusTypeEnum getAllTasksStatus() {
-        return taskStatusTypeEnum;
+        return status;
     }
 
-    public void setTaskStatus(StatusTypeEnum taskStatusTypeEnum) {
-        this.taskStatusTypeEnum = taskStatusTypeEnum;
+    public void setTaskStatus(StatusTypeEnum status) {
+        this.status = status;
     }
 
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return id == task.id & Objects.equals(taskName, task.taskName) & taskStatusTypeEnum == task.taskStatusTypeEnum
+        return id == task.id & Objects.equals(name, task.name) & status == task.status
                 & Objects.equals(description, task.description);
     }
 
     @Override
-    public int hashCode(){
-        return Objects.hash(id, taskName, taskStatusTypeEnum, description);
+    public int hashCode() {
+        return Objects.hash(id, name, status, description);
     }
 
     @Override
     public String toString() {
         String result = "Task{" +
-                    "id=" + id +
-                    ", taskName='" + taskName + '\'';
+                "id=" + id +
+                ", name='" + name + '\'';
         if (description != null) {
             result = result + ", description.length='" + description.length() + '\'';
         } else result = result + ", description.length=null";
-        result = result + ", taskStatus=" + taskStatusTypeEnum + '}';
+        result = result + ", taskStatus=" + status + '}';
         return result;
     }
 }

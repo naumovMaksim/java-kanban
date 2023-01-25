@@ -1,15 +1,15 @@
 package tasks;
 
 import tasks.enums.StatusTypeEnum;
-import tasks.enums.TaskTypeEnum;
+import tasks.enums.type;
 
 import java.util.Objects;
 
 public class SubTask extends Task {
     protected int epicId;
 
-    public SubTask(String taskName, TaskTypeEnum taskTypeEnum, String description, StatusTypeEnum taskStatusTypeEnum, int epicId) {
-        super(taskName,taskTypeEnum, description, taskStatusTypeEnum);
+    public SubTask(String name, type type, String description, StatusTypeEnum status, int epicId) {
+        super(name, type, description, status);
         this.epicId = epicId;
     }
 
@@ -36,9 +36,9 @@ public class SubTask extends Task {
         return "SubTask{" +
                 "epicId=" + epicId +
                 ", id=" + id +
-                ", taskName='" + taskName + '\'' +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", taskStatus=" + taskStatusTypeEnum +
+                ", taskStatus=" + status +
                 '}';
     }
 }
