@@ -1,28 +1,29 @@
 package tasks;
 
 import tasks.enums.StatusTypeEnum;
-import tasks.enums.type;
+import tasks.enums.Type;
 
-import java.time.Instant;
+
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
     protected int id;
     protected String name;
-    protected type type;
+    protected Type type;
     protected String description;
     protected StatusTypeEnum status;
-    protected Instant startTime;
+    protected LocalDateTime startTime;
     protected long duration;
 
-    public Task(String name, type type, String description, StatusTypeEnum status) {
+    public Task(String name, Type type, String description, StatusTypeEnum status) {
         this.name = name;
         this.type = type;
         this.description = description;
         this.status = status;
     }
 
-    public Task(String name, type type, String description, StatusTypeEnum status, Instant startTime, long duration) {
+    public Task(String name, Type type, String description, StatusTypeEnum status, LocalDateTime startTime, long duration) {
         this.name = name;
         this.type = type;
         this.description = description;
@@ -47,7 +48,7 @@ public class Task {
         this.name = name;
     }
 
-    public type getType() {
+    public Type getType() {
         return type;
     }
 
@@ -67,11 +68,11 @@ public class Task {
         this.status = status;
     }
 
-    public Instant getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Instant startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
@@ -83,8 +84,8 @@ public class Task {
         this.duration = duration;
     }
 
-    public Instant getEndTime() {
-        return startTime.plusSeconds(duration);
+    public LocalDateTime getEndTime() {
+        return startTime.plusMinutes(duration);
     }
 
     @Override

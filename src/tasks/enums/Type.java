@@ -1,6 +1,6 @@
 package tasks.enums;
 
-public enum type {
+public enum Type {
     TASK,
     SUB_TASK,
     EPIC

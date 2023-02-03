@@ -5,13 +5,15 @@ import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
 import tasks.enums.StatusTypeEnum;
-import tasks.enums.type;
+import tasks.enums.Type;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CSVTaskFormat {
+    static DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
     public static String getHeader() {
         return "id,type,name,status,description,epic";
     }
@@ -46,7 +48,7 @@ public class CSVTaskFormat {
     public static String toString(Task task) {
         String subTaskEpicId = "";
 
-        if (task.getType().equals(type.SUB_TASK)) {
+        if (task.getType().equals(Type.SUB_TASK)) {
             subTaskEpicId = String.valueOf(((SubTask) task).getEpicId());
         }
         return String.format("%s,%s,%s,%s,%s,%s",
@@ -63,24 +65,24 @@ public class CSVTaskFormat {
 
     public static Task fromString(String result) {
         int id;
-        type taskType;
+        Type taskType;
         String name;
         StatusTypeEnum status;
         String description;
-        Instant startTime;
-        Instant endTime;
+        LocalDateTime startTime;
+        LocalDateTime endTime;
         long duration;
 
         String[] line = result.split(",");
         if (line[1].equals("TASK") || line[1].equals("EPIC") || line[1].equals("SUB_TASK")) {
             id = Integer.parseInt(line[0]);
-            taskType = type.valueOf(line[1]);
+            taskType = Type.valueOf(line[1]);
             name = line[2];
             status = StatusTypeEnum.valueOf(line[3]);
             description = line[4];
-            startTime = Instant.parse(line[6]);
+            startTime = LocalDateTime.parse(line[6], formatter);
             duration = Long.parseLong(line[7]);
-            endTime = Instant.parse(line[8]);
+            endTime = LocalDateTime.parse(line[8], formatter);
 
             switch (taskType) {
                 case EPIC:

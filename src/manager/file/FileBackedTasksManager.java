@@ -9,12 +9,12 @@ import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
 import tasks.enums.StatusTypeEnum;
-import tasks.enums.type;
+import tasks.enums.Type;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -22,18 +22,18 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public static void main(String[] args) throws IOException, ValidateException {
         TaskManager fileBackedTasksManager = Managers.getDefault();
 
-        fileBackedTasksManager.createTask(new Task("Ноутбук", type.TASK,
+        fileBackedTasksManager.createTask(new Task("Ноутбук", Type.TASK,
                 "Купить новый ноутбук", StatusTypeEnum.NEW,
-                Instant.ofEpochSecond(1), 5));
-        fileBackedTasksManager.createTask(new Task("Кот", type.TASK,
+                LocalDateTime.of(2023,2,3,10, 0), 5));
+        fileBackedTasksManager.createTask(new Task("Кот", Type.TASK,
                 "Покормить кота", StatusTypeEnum.DONE,
-                Instant.ofEpochSecond(10), 5));
-        fileBackedTasksManager.createEpic(new Epic("Продукты", type.EPIC,
+                LocalDateTime.of(2023,2,3,11, 0), 5));
+        fileBackedTasksManager.createEpic(new Epic("Продукты", Type.EPIC,
                 "Купить продукты", StatusTypeEnum.NEW,
-                Instant.ofEpochSecond(20), 5));
-        fileBackedTasksManager.createSubTask(new SubTask("Пойти в магазин", type.SUB_TASK,
+                LocalDateTime.of(2023,2,3,12, 0), 5));
+        fileBackedTasksManager.createSubTask(new SubTask("Пойти в магазин", Type.SUB_TASK,
                 "Купить все в магазине", StatusTypeEnum.NEW, 3,
-                Instant.ofEpochSecond(30), 5));
+                LocalDateTime.of(2023,2,3,13, 0), 5));
 
         fileBackedTasksManager.getTaskById(1);
         fileBackedTasksManager.getTaskById(2);

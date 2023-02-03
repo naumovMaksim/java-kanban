@@ -1,20 +1,21 @@
 package tasks;
 
 import tasks.enums.StatusTypeEnum;
-import tasks.enums.type;
+import tasks.enums.Type;
 
-import java.time.Instant;
+
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class SubTask extends Task {
     protected int epicId;
 
-    public SubTask(String name, type type, String description, StatusTypeEnum status, int epicId) {
+    public SubTask(String name, Type type, String description, StatusTypeEnum status, int epicId) {
         super(name, type, description, status);
         this.epicId = epicId;
     }
 
-    public SubTask(String name, type type, String description, StatusTypeEnum status, int epicId, Instant startTime,
+    public SubTask(String name, Type type, String description, StatusTypeEnum status, int epicId, LocalDateTime startTime,
                    long duration) {
         super(name, type, description, status, startTime, duration);
         this.epicId = epicId;

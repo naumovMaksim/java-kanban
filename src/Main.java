@@ -3,32 +3,32 @@ import manager.*;
 import manager.interfaces.TaskManager;
 import tasks.*;
 import tasks.enums.StatusTypeEnum;
-import tasks.enums.type;
+import tasks.enums.Type;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 public class Main {
 
     public static void main(String[] args) throws ValidateException {
         TaskManager inMemoryTaskManager = Managers.getDefault();
 
-        Task task = new Task("Ноутбук", type.TASK, "Купить новый ноутбук", StatusTypeEnum.NEW,
-                Instant.ofEpochSecond(1), 5);
-        Task task1 = new Task("Квартира", type.TASK,"Купить новую квартиру", StatusTypeEnum.NEW,
-                Instant.ofEpochSecond(4), 3);
-        Epic epic = new Epic("Продукты", type.EPIC, "Купить продукты", StatusTypeEnum.NEW,
-                Instant.ofEpochSecond(0), 0);
-        Epic epic1 = new Epic("Проект", type.EPIC, "Сделать проект", StatusTypeEnum.NEW,
-                Instant.ofEpochSecond(0), 0);
+        Task task = new Task("Ноутбук", Type.TASK, "Купить новый ноутбук", StatusTypeEnum.NEW,
+                LocalDateTime.of(2023,2,3,10, 0), 5);
+        Task task1 = new Task("Квартира", Type.TASK,"Купить новую квартиру", StatusTypeEnum.NEW,
+                LocalDateTime.of(2023,2,3,10, 0), 3);
+        Epic epic = new Epic("Продукты", Type.EPIC, "Купить продукты", StatusTypeEnum.NEW,
+                LocalDateTime.of(2023,2,3,10, 0), 0);
+        Epic epic1 = new Epic("Проект", Type.EPIC, "Сделать проект", StatusTypeEnum.NEW,
+                LocalDateTime.of(2023,2,3,10, 0), 0);
         SubTask subTask = new SubTask("Составить список",
-                type.SUB_TASK, "Добавить в список все продукты", StatusTypeEnum.NEW, 2,
-                Instant.ofEpochSecond(15), 4);
+                Type.SUB_TASK, "Добавить в список все продукты", StatusTypeEnum.NEW, 2,
+                LocalDateTime.of(2023,2,3,10, 0), 4);
         SubTask subTask1 = new SubTask("Изучить теорию",
-                type.SUB_TASK,"Подготовить проект к 1 проверке", StatusTypeEnum.NEW, 1,
-                Instant.ofEpochSecond(20), 2);
+                Type.SUB_TASK,"Подготовить проект к 1 проверке", StatusTypeEnum.NEW, 1,
+                LocalDateTime.of(2023,2,3,10, 0), 2);
         SubTask subTask2 = new SubTask("Пойти в магазин",
-                type.SUB_TASK, "Купить все в магазине", StatusTypeEnum.NEW, 4,
-                Instant.ofEpochSecond(40), 100);
+                Type.SUB_TASK, "Купить все в магазине", StatusTypeEnum.NEW, 4,
+                LocalDateTime.of(2023,2,3,10, 0), 100);
 
         inMemoryTaskManager.createTask(task);
         inMemoryTaskManager.createTask(task1);
@@ -97,6 +97,6 @@ public class Main {
 //
 //        System.out.println("4 Проверка вывода истории:" + "\n" + inMemoryTaskManager.getHistory());
 
-        System.out.println("1 проверка временного вывода: " + inMemoryTaskManager.getPrioritizedTasks());
+        System.out.println("1 проверка временного вывода: " + inMemoryTaskManager.getprioritizedTaskss());
     }
 }
