@@ -7,6 +7,7 @@ import tasks.Task;
 import tasks.enums.StatusTypeEnum;
 import tasks.enums.type;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,13 +49,16 @@ public class CSVTaskFormat {
         if (task.getType().equals(type.SUB_TASK)) {
             subTaskEpicId = String.valueOf(((SubTask) task).getEpicId());
         }
-        return String.format("%s,%s,%s,%s,%s,%s\n",
+        return String.format("%s,%s,%s,%s,%s,%s",
                 task.getId(),
                 task.getType(),
                 task.getName(),
                 task.getAllTasksStatus(),
                 task.getDescription(),
-                subTaskEpicId);
+                subTaskEpicId +
+                        "," + task.getStartTime() +
+                        "," + task.getDuration() +
+                        "," + task.getEndTime() + "\n");
     }
 
     public static Task fromString(String result) {
@@ -63,6 +67,9 @@ public class CSVTaskFormat {
         String name;
         StatusTypeEnum status;
         String description;
+        Instant startTime;
+        Instant endTime;
+        long duration;
 
         String[] line = result.split(",");
         if (line[1].equals("TASK") || line[1].equals("EPIC") || line[1].equals("SUB_TASK")) {
@@ -71,18 +78,22 @@ public class CSVTaskFormat {
             name = line[2];
             status = StatusTypeEnum.valueOf(line[3]);
             description = line[4];
+            startTime = Instant.parse(line[6]);
+            duration = Long.parseLong(line[7]);
+            endTime = Instant.parse(line[8]);
 
             switch (taskType) {
                 case EPIC:
-                    Epic epic = new Epic(name, taskType, description, status);
-                    epic.setId(id);// не понял что нужно сделать: (добавь еще он конструктор в Task, что бы принимал и id тоже. Касается всех case)
+                    Epic epic = new Epic(name, taskType, description, status, startTime, duration);
+                    epic.setId(id);
+                    epic.setEndTime(endTime);
                     return epic;
                 case TASK:
-                    Task task = new Task(name, taskType, description, status);
+                    Task task = new Task(name, taskType, description, status, startTime, duration);
                     task.setId(id);
                     return task;
                 case SUB_TASK:
-                    SubTask subTask = new SubTask(name, taskType, description, status, Integer.parseInt(line[5]));
+                    SubTask subTask = new SubTask(name, taskType, description, status, Integer.parseInt(line[5]), startTime, duration);
                     subTask.setId(id);
                     return subTask;
             }

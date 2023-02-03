@@ -1,5 +1,2 @@
 id,type,name,status,description,epic
-2,EPIC,Продукты,NEW,Купить продукты,
-3,SUB_TASK,Пойти в магазин,NEW,Купить все в магазине,2
 
-2,3

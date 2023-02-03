@@ -1,6 +1,7 @@
 package manager.file;
 
 import exception.ManagerSaveException;
+import exception.ValidateException;
 import manager.Managers;
 import manager.inMemory.InMemoryTaskManager;
 import manager.interfaces.TaskManager;
@@ -13,62 +14,66 @@ import tasks.enums.type;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.util.*;
 
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
-
-    public static void main(String[] args) throws IOException {
-//        TaskManager fileBackedTasksManager = Managers.getDefault();
-//
-//        fileBackedTasksManager.createTask(new Task("Ноутбук", type.TASK,
-//                "Купить новый ноутбук", StatusTypeEnum.NEW));
-//        fileBackedTasksManager.createTask(new Task("Кот", type.TASK,
-//                "Покормить кота", StatusTypeEnum.DONE));
-//        fileBackedTasksManager.createEpic(new Epic("Продукты", type.EPIC,
-//                "Купить продукты", StatusTypeEnum.NEW));
-//        fileBackedTasksManager.createSubTask(new SubTask("Пойти в магазин", type.SUB_TASK,
-//                "Купить все в магазине", StatusTypeEnum.NEW, 3));
-//
-//        fileBackedTasksManager.getTaskById(1);
-//        fileBackedTasksManager.getTaskById(2);
-//        fileBackedTasksManager.getSubTaskById(4);
-//
-//        System.out.println("Проверка записи в файл: " + "\n" + Files.readString(Path.of("resources/testReport.csv")) + "\n");
-//
-//        File fileLoadTest = new File("resources/testReport.csv");
-//        FileBackedTasksManager fileBackedTasksManager2 = loadFromFile(fileLoadTest);
-//
-//        System.out.println("Проверка считывания из файла:" + "\n" + "История: " + fileBackedTasksManager2.getHistory() + "\n");
-//        System.out.println(fileBackedTasksManager2.getAllTasks() + "\n" + fileBackedTasksManager2.getAllEpics() + "\n" +
-//                fileBackedTasksManager2.getAllSubTasks());
-
+    public static void main(String[] args) throws IOException, ValidateException {
         TaskManager fileBackedTasksManager = Managers.getDefault();
 
-        int taskId = fileBackedTasksManager.createTask(new Task("Ноутбук", type.TASK,
-                "Купить новый ноутбук", StatusTypeEnum.NEW));
-        int epicId = fileBackedTasksManager.createEpic(new Epic("Продукты", type.EPIC,
-                "Купить продукты", StatusTypeEnum.NEW));
-        int subTaskId = fileBackedTasksManager.createSubTask(new SubTask("Пойти в магазин", type.SUB_TASK,
-                "Купить все в магазине", StatusTypeEnum.NEW, 2));
+        fileBackedTasksManager.createTask(new Task("Ноутбук", type.TASK,
+                "Купить новый ноутбук", StatusTypeEnum.NEW,
+                Instant.ofEpochSecond(1), 5));
+        fileBackedTasksManager.createTask(new Task("Кот", type.TASK,
+                "Покормить кота", StatusTypeEnum.DONE,
+                Instant.ofEpochSecond(10), 5));
+        fileBackedTasksManager.createEpic(new Epic("Продукты", type.EPIC,
+                "Купить продукты", StatusTypeEnum.NEW,
+                Instant.ofEpochSecond(20), 5));
+        fileBackedTasksManager.createSubTask(new SubTask("Пойти в магазин", type.SUB_TASK,
+                "Купить все в магазине", StatusTypeEnum.NEW, 3,
+                Instant.ofEpochSecond(30), 5));
 
         fileBackedTasksManager.getTaskById(1);
-        fileBackedTasksManager.getEpicById(2);
-        fileBackedTasksManager.getSubTaskById(3);
-        fileBackedTasksManager.deleteTaskById(taskId);
+        fileBackedTasksManager.getTaskById(2);
+        fileBackedTasksManager.getSubTaskById(4);
 
         System.out.println("Проверка записи в файл: " + "\n" + Files.readString(Path.of("resources/testReport.csv")) + "\n");
 
         File fileLoadTest = new File("resources/testReport.csv");
         FileBackedTasksManager fileBackedTasksManager2 = loadFromFile(fileLoadTest);
-        System.out.println("Сохраненное состояние");
-        System.out.println(fileBackedTasksManager.getHistory() + "\n");
-        System.out.println(fileBackedTasksManager.getAllTasks() + "\n" + fileBackedTasksManager.getAllEpics() + "\n" +
-                fileBackedTasksManager.getAllSubTasks());
-        System.out.println("Загруженное состояние");
-        System.out.println(fileBackedTasksManager2.getHistory() + "\n");
+
+        System.out.println("Проверка считывания из файла:" + "\n" + "История: " + fileBackedTasksManager2.getHistory() + "\n");
         System.out.println(fileBackedTasksManager2.getAllTasks() + "\n" + fileBackedTasksManager2.getAllEpics() + "\n" +
                 fileBackedTasksManager2.getAllSubTasks());
+
+//        TaskManager fileBackedTasksManager = Managers.getDefault();
+//
+//        int taskId = fileBackedTasksManager.createTask(new Task("Ноутбук", type.TASK,
+//                "Купить новый ноутбук", StatusTypeEnum.NEW, Instant.ofEpochSecond(1), 5));
+//        int epicId = fileBackedTasksManager.createEpic(new Epic("Продукты", type.EPIC,
+//                "Купить продукты", StatusTypeEnum.NEW, Instant.ofEpochSecond(10), 5));
+//        int subTaskId = fileBackedTasksManager.createSubTask(new SubTask("Пойти в магазин", type.SUB_TASK,
+//                "Купить все в магазине", StatusTypeEnum.NEW, 2, Instant.ofEpochSecond(20), 5));
+//
+//        fileBackedTasksManager.getTaskById(1);
+//        fileBackedTasksManager.getEpicById(2);
+//        fileBackedTasksManager.getSubTaskById(3);
+//        fileBackedTasksManager.deleteTaskById(taskId);
+//
+//        System.out.println("Проверка записи в файл: " + "\n" + Files.readString(Path.of("resources/testReport.csv")) + "\n");
+//
+//        File fileLoadTest = new File("resources/testReport.csv");
+//        FileBackedTasksManager fileBackedTasksManager2 = loadFromFile(fileLoadTest);
+//        System.out.println("Сохраненное состояние");
+//        System.out.println(fileBackedTasksManager.getHistory() + "\n");
+//        System.out.println(fileBackedTasksManager.getAllTasks() + "\n" + fileBackedTasksManager.getAllEpics() + "\n" +
+//                fileBackedTasksManager.getAllSubTasks());
+//        System.out.println("Загруженное состояние");
+//        System.out.println(fileBackedTasksManager2.getHistory() + "\n");
+//        System.out.println(fileBackedTasksManager2.getAllTasks() + "\n" + fileBackedTasksManager2.getAllEpics() + "\n" +
+//                fileBackedTasksManager2.getAllSubTasks());
     }
 
     private final File file;
@@ -102,7 +107,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    public static FileBackedTasksManager loadFromFile(File file) {// разобрал как работает ваш пример)
+    public static FileBackedTasksManager loadFromFile(File file) {
         final FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
         try {
             final String csv = Files.readString(file.toPath());
@@ -143,24 +148,36 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public int createTask(Task task) {
+    public int createTask(Task task)  throws ValidateException {
+        if (task != null) {
         super.createTask(task);
         save();
         return task.getId();
+        } else {
+            return -1;
+        }
     }
 
     @Override
     public int createEpic(Epic epic) {
-        super.createEpic(epic);
-        save();
-        return epic.getId();
+        if (epic != null) {
+            super.createEpic(epic);
+            save();
+            return epic.getId();
+        } else {
+            return -1;
+        }
     }
 
     @Override
-    public int createSubTask(SubTask subTask) {
+    public int createSubTask(SubTask subTask) throws ValidateException {
+        if (subTask != null && subTask.getEpicId() > 0) {
         super.createSubTask(subTask);
         save();
         return subTask.getId();
+        } else {
+            return -1;
+        }
     }
 
     @Override

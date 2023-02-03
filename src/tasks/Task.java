@@ -3,6 +3,7 @@ package tasks;
 import tasks.enums.StatusTypeEnum;
 import tasks.enums.type;
 
+import java.time.Instant;
 import java.util.Objects;
 
 public class Task {
@@ -11,12 +12,23 @@ public class Task {
     protected type type;
     protected String description;
     protected StatusTypeEnum status;
+    protected Instant startTime;
+    protected long duration;
 
     public Task(String name, type type, String description, StatusTypeEnum status) {
         this.name = name;
         this.type = type;
         this.description = description;
         this.status = status;
+    }
+
+    public Task(String name, type type, String description, StatusTypeEnum status, Instant startTime, long duration) {
+        this.name = name;
+        this.type = type;
+        this.description = description;
+        this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
     public int getId() {
@@ -55,6 +67,26 @@ public class Task {
         this.status = status;
     }
 
+    public Instant getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Instant startTime) {
+        this.startTime = startTime;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public Instant getEndTime() {
+        return startTime.plusSeconds(duration);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -77,7 +109,8 @@ public class Task {
         if (description != null) {
             result = result + ", description.length='" + description.length() + '\'';
         } else result = result + ", description.length=null";
-        result = result + ", taskStatus=" + status + '}';
+        result = result + ", taskStatus=" + status + ", startTime: " + startTime + ", duration:" + duration +
+                ", endTime: " + getEndTime() +'}';
         return result;
     }
 }

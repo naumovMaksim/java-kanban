@@ -3,6 +3,7 @@ package tasks;
 import tasks.enums.StatusTypeEnum;
 import tasks.enums.type;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -10,11 +11,17 @@ import java.util.Objects;
 public class Epic extends Task {
 
     protected List<Integer> subtaskIds;
+    protected Instant endTime;
 
     public Epic(String name, type type, String description, StatusTypeEnum status) {
-
         super(name, type, description, status);
         subtaskIds = new ArrayList<>();
+    }
+
+    public Epic(String name, type type, String description, StatusTypeEnum status, Instant startTime, long duration) {
+        super(name, type, description, status, startTime, duration);
+        subtaskIds = new ArrayList<>();
+        this.endTime = super.getEndTime();
     }
 
     public List<Integer> getSubtaskIds() {
@@ -27,6 +34,15 @@ public class Epic extends Task {
 
     public void clearSubTaskId() {
         subtaskIds.clear();
+    }
+
+    public void setEndTime(Instant endTime) {
+        this.endTime = endTime;
+    }
+
+    @Override
+    public Instant getEndTime(){
+        return endTime;
     }
 
     @Override
@@ -52,7 +68,8 @@ public class Epic extends Task {
         if (description != null) {
             result = result + ", description.length='" + description.length() + '\'';
         } else result = result + ", description.length='null'";
-        result = result + ", taskStatus=" + status + '}';
+        result = result + ", taskStatus=" + status + ", startTime: " + startTime + ", duration:" + duration +
+                ", endTime: " + getEndTime() +'}';
         return result;
     }
 }

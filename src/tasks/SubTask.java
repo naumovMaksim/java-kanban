@@ -3,6 +3,7 @@ package tasks;
 import tasks.enums.StatusTypeEnum;
 import tasks.enums.type;
 
+import java.time.Instant;
 import java.util.Objects;
 
 public class SubTask extends Task {
@@ -10,6 +11,12 @@ public class SubTask extends Task {
 
     public SubTask(String name, type type, String description, StatusTypeEnum status, int epicId) {
         super(name, type, description, status);
+        this.epicId = epicId;
+    }
+
+    public SubTask(String name, type type, String description, StatusTypeEnum status, int epicId, Instant startTime,
+                   long duration) {
+        super(name, type, description, status, startTime, duration);
         this.epicId = epicId;
     }
 
@@ -38,7 +45,7 @@ public class SubTask extends Task {
                 ", id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", taskStatus=" + status +
-                '}';
+                ", taskStatus=" + status + ", startTime: " + startTime + ", duration:" + duration +
+                ", endTime: " + getEndTime() +'}';
     }
 }
