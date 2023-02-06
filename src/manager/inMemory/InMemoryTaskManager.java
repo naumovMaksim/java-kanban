@@ -6,6 +6,7 @@ import manager.interfaces.HistoryManager;
 import manager.interfaces.TaskManager;
 import tasks.*;
 import tasks.enums.StatusTypeEnum;
+import tasks.enums.Type;
 
 
 import java.time.LocalDateTime;
@@ -105,11 +106,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task task) {
         if (task != null) {
-            try {
-                validateTaskPriority(task);
-            } catch (ValidateException e) {
-                return;
-            }
+            prioritizedTasks.remove(task);
+            validateTaskPriority(task);
             addprioritizedTasks(task);
             tasksMemory.put(task.getId(), task);
         }
@@ -135,16 +133,12 @@ public class InMemoryTaskManager implements TaskManager {
             if (savedSubtask == null) {
                 return;
             }
-            try {
-                validateTaskPriority(subTask);
-            } catch (ValidateException e) {
-                return;
-            }
             final Epic epic = epicsMemory.get(epicId);
             if (epic == null) {
                 return;
             }
             addprioritizedTasks(subTask);
+            validateTaskPriority(subTask);
             subTasksMemory.put(id, subTask);
             updateEpicStatus(epic);
             updateEpicTime(epic);
@@ -323,6 +317,22 @@ public class InMemoryTaskManager implements TaskManager {
             final LocalDateTime startTime = LocalDateTime.from(task.getStartTime());
             final LocalDateTime endTime = LocalDateTime.from(task.getEndTime());
             for (Task t : prioritizedTasks) {
+                if (t.equals(task)) {
+                    continue;
+                }
+                if (t.getType().equals(Type.EPIC) && task.getType().equals(Type.SUB_TASK)) {
+                    Epic epic = (Epic) t;
+                    SubTask subTask = (SubTask) task;
+                    if (epic.getId() == subTask.getEpicId()) {
+                        continue;
+                    }
+                } else if (task.getType().equals(Type.EPIC) && t.getType().equals(Type.SUB_TASK)) {
+                    Epic epic = (Epic) task;
+                    SubTask subTask = (SubTask) t;
+                    if (epic.getId() == subTask.getEpicId()) {
+                        continue;
+                    }
+                }
                 final LocalDateTime existStart = t.getStartTime();
                 final LocalDateTime existEnd = t.getEndTime();
                 if (!endTime.isAfter(existStart)) {// newTimeEnd <= existTimeStart

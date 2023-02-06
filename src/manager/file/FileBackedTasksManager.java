@@ -18,7 +18,7 @@ import java.util.*;
 
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         TaskManager fileBackedTasksManager = Managers.getDefault();
 
         fileBackedTasksManager.createTask(new Task("Ноутбук", Type.TASK,
@@ -38,7 +38,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         fileBackedTasksManager.getTaskById(2);
         fileBackedTasksManager.getSubTaskById(4);
 
-        System.out.println("Проверка записи в файл: " + "\n" + Files.readString(Path.of("resources/testReport.csv")) + "\n");
+        try {
+            System.out.println("Проверка записи в файл: " + "\n" + Files.readString(Path.of("resources/testReport.csv")) + "\n");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         File fileLoadTest = new File("resources/testReport.csv");
         FileBackedTasksManager fileBackedTasksManager2 = loadFromFile(fileLoadTest);
