@@ -1,6 +1,8 @@
+package manager.file;
+
 import exception.ManagerSaveException;
-import exception.ValidateException;
-import manager.file.FileBackedTasksManager;
+import manager.TaskManagerTest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Task;
@@ -12,11 +14,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>{
+class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
     File file;
 
     @BeforeEach
-    void beforeEach() throws ValidateException {
+    void beforeEach() {
         file = new File("resources/testFiles/fileWithTest.csv");
         manager = new FileBackedTasksManager(file);
         tasksCreation();
@@ -30,15 +32,8 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         manager.getEpicById(2);
 
         assertNotNull(list);
-        assertEquals(task.getId(), list.get(0).getId());
-        assertEquals(task.getType(), list.get(0).getType());
-        assertEquals(task.getName(), list.get(0).getName());
-        assertEquals(task.getDescription(), list.get(0).getDescription());
-        assertEquals(task.getAllTasksStatus(), list.get(0).getAllTasksStatus());
-        assertEquals(task.getStartTime(), list.get(0).getStartTime());
-        assertEquals(task.getDuration(), list.get(0).getDuration());
-        assertEquals(task.getEndTime(), list.get(0).getEndTime());
-        assertEquals(List.of(task, epic), manager.getHistory());
+        Assertions.assertEquals(task, list.get(0));
+        Assertions.assertEquals(List.of(task, epic), manager.getHistory());
     }
 
     @Test
@@ -58,7 +53,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         List<Task> list = fileBackedTasksManager.getAllTasks();
 
         assertNotNull(list);
-        assertEquals(Collections.emptyList(), manager.getHistory());
+        Assertions.assertEquals(Collections.emptyList(), manager.getHistory());
     }
 
     @Test
@@ -70,8 +65,8 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         manager.getEpicById(2);
 
         assertEquals(1, list.size());
-        assertEquals(Collections.emptyList(), epic.getSubtaskIds());
-        assertEquals(List.of(task, epic), manager.getHistory());
+        Assertions.assertEquals(Collections.emptyList(), epic.getSubtaskIds());
+        Assertions.assertEquals(List.of(task, epic), manager.getHistory());
     }
 
     @Test
@@ -80,10 +75,10 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         manager.deleteAllEpics();
         manager.deleteAllSubTasks();
         final ManagerSaveException exception = assertThrows(ManagerSaveException.class,
-            () -> {
-        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(Path.of("").toFile());
-        fileBackedTasksManager.save();
-            });
+                () -> {
+                    FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(Path.of("").toFile());
+                    fileBackedTasksManager.save();
+                });
         assertEquals(" (Невозможно создать файл, так как он уже существует)", exception.getMessage());
     }
 }

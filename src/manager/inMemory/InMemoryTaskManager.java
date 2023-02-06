@@ -22,16 +22,12 @@ public class InMemoryTaskManager implements TaskManager {
     protected int id = 1;
 
     @Override
-    public int createTask(Task task) throws ValidateException {
+    public int createTask(Task task) {
         int taskId = -1;
         if (task != null) {
             taskId = id++;
             task.setId(taskId);
-            try {
-                validateTaskPriority(task);
-            } catch (ValidateException e) {
-                throw new ValidateException(e.getMessage());
-            }
+            validateTaskPriority(task);
             addprioritizedTasks(task);
             tasksMemory.put(task.getId(), task);
         }
@@ -53,16 +49,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public int createSubTask(SubTask subTask) throws ValidateException {
+    public int createSubTask(SubTask subTask) {
         int subtaskId = -1;
         if (subTask != null & !epicsMemory.isEmpty()) {
             subtaskId = id++;
             subTask.setId(subtaskId);
-            try {
-                validateTaskPriority(subTask);
-            } catch (ValidateException e) {
-                throw new ValidateException(e.getMessage());
-            }
+            validateTaskPriority(subTask);
             subTasksMemory.put(subTask.getId(), subTask);
             Epic epic = epicsMemory.get(subTask.getEpicId());
             if (epic != null) {
@@ -326,7 +318,7 @@ public class InMemoryTaskManager implements TaskManager {
         return List.copyOf(prioritizedTasks);
     }
 
-    private void validateTaskPriority(Task task) throws ValidateException {
+    private void validateTaskPriority(Task task) {
         if (!prioritizedTasks.isEmpty()) {
             final LocalDateTime startTime = LocalDateTime.from(task.getStartTime());
             final LocalDateTime endTime = LocalDateTime.from(task.getEndTime());

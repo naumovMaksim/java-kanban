@@ -1,4 +1,5 @@
-import exception.ValidateException;
+package manager;
+
 import manager.inMemory.InMemoryHistoryManager;
 import manager.interfaces.HistoryManager;
 import manager.interfaces.TaskManager;
@@ -23,13 +24,13 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     protected SubTask subTask;
     HistoryManager historyManager;
 
-    protected void tasksCreation() throws ValidateException {
+    protected void tasksCreation() {
         task = new Task("Task", Type.TASK, "description", StatusTypeEnum.NEW,
-                LocalDateTime.of(2023,2,3,6, 0), 1);
+                LocalDateTime.of(2023, 2, 3, 6, 0), 1);
         epic = new Epic("Epic", Type.EPIC, "description", StatusTypeEnum.NEW,
-                LocalDateTime.of(2023,2,3,7, 0), 1);
+                LocalDateTime.of(2023, 2, 3, 7, 0), 1);
         subTask = new SubTask("SubTask", Type.SUB_TASK, "description", StatusTypeEnum.NEW, 2,
-                LocalDateTime.of(2023,2,3,8, 0), 1);
+                LocalDateTime.of(2023, 2, 3, 8, 0), 1);
 
         manager.createTask(task);
         manager.createEpic(epic);
@@ -68,7 +69,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void wrongTaskCreate() throws ValidateException {
+    public void wrongTaskCreate() {
         assertEquals(-1, manager.createTask(null));
     }
 
@@ -78,15 +79,15 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void wrongSubTaskCreate() throws ValidateException {
+    public void wrongSubTaskCreate() {
         assertEquals(-1, manager.createSubTask(null));
     }
 
     @Test
-    public void wrongEpicSubTaskCreate() throws ValidateException {
+    public void wrongEpicSubTaskCreate() {
         assertEquals(-1, manager.createSubTask(new SubTask("SubTask", Type.SUB_TASK,
                 "description", StatusTypeEnum.NEW, 0,
-                LocalDateTime.of(2023,2,3,7, 0), 1)));
+                LocalDateTime.of(2023, 2, 3, 7, 0), 1)));
     }
 
     @Test
@@ -205,10 +206,10 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void updateEpicWhenSubTasksDoneAndNew() throws ValidateException {
+    public void updateEpicWhenSubTasksDoneAndNew() {
         subTask.setTaskStatus(StatusTypeEnum.DONE);
         manager.createSubTask(new SubTask("SubTask", Type.SUB_TASK, "description", StatusTypeEnum.NEW, 2,
-                LocalDateTime.of(2023,2,3,20, 0), 1));
+                LocalDateTime.of(2023, 2, 3, 20, 0), 1));
         manager.updateEpic(epic);
         assertEquals(StatusTypeEnum.IN_PROGRESS, epic.getAllTasksStatus());
     }

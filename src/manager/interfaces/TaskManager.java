@@ -1,16 +1,15 @@
 package manager.interfaces;
 
-import exception.ValidateException;
 import tasks.*;
 
 import java.util.List;
 
 public interface TaskManager {
-    int createTask(Task task) throws ValidateException;
+    int createTask(Task task) ;
 
     int createEpic(Epic epic);
 
-    int createSubTask(SubTask subTask) throws ValidateException;
+    int createSubTask(SubTask subTask) ;
 
     List<Task> getAllTasks();
 

@@ -1,4 +1,5 @@
-import exception.ValidateException;
+package manager.history;
+
 import manager.inMemory.InMemoryHistoryManager;
 import manager.inMemory.InMemoryTaskManager;
 import manager.interfaces.HistoryManager;
@@ -23,16 +24,16 @@ class HistoryManagerTest {
     protected SubTask subTask;
 
     @BeforeEach
-    void beforeEach() throws ValidateException {
+    void beforeEach() {
         historyManager = new InMemoryHistoryManager();
         inMemoryTaskManager = new InMemoryTaskManager();
 
         task = new Task("Task", Type.TASK, "description", StatusTypeEnum.NEW,
-                LocalDateTime.of(2023,2,3,10, 0), 1);
+                LocalDateTime.of(2023, 2, 3, 10, 0), 1);
         epic = new Epic("Epic", Type.EPIC, "description", StatusTypeEnum.NEW,
-                LocalDateTime.of(2023,2,3,11, 0), 1);
+                LocalDateTime.of(2023, 2, 3, 11, 0), 1);
         subTask = new SubTask("SubTask", Type.SUB_TASK, "description", StatusTypeEnum.NEW, 2,
-                LocalDateTime.of(2023,2,3,12, 0), 1);
+                LocalDateTime.of(2023, 2, 3, 12, 0), 1);
 
         inMemoryTaskManager.createTask(task);
         inMemoryTaskManager.createEpic(epic);

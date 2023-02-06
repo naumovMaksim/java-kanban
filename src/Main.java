@@ -1,4 +1,3 @@
-import exception.ValidateException;
 import manager.*;
 import manager.interfaces.TaskManager;
 import tasks.*;
@@ -9,7 +8,7 @@ import java.time.LocalDateTime;
 
 public class Main {
 
-    public static void main(String[] args) throws ValidateException {
+    public static void main(String[] args)  {
         TaskManager inMemoryTaskManager = Managers.getDefault();
 
         Task task = new Task("Ноутбук", Type.TASK, "Купить новый ноутбук", StatusTypeEnum.NEW,

@@ -1,7 +1,6 @@
 package manager.file;
 
 import exception.ManagerSaveException;
-import exception.ValidateException;
 import manager.Managers;
 import manager.inMemory.InMemoryTaskManager;
 import manager.interfaces.TaskManager;
@@ -19,7 +18,7 @@ import java.util.*;
 
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
-    public static void main(String[] args) throws IOException, ValidateException {
+    public static void main(String[] args) throws IOException {
         TaskManager fileBackedTasksManager = Managers.getDefault();
 
         fileBackedTasksManager.createTask(new Task("Ноутбук", Type.TASK,
@@ -148,7 +147,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public int createTask(Task task)  throws ValidateException {
+    public int createTask(Task task)   {
         if (task != null) {
         super.createTask(task);
         save();
@@ -170,7 +169,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public int createSubTask(SubTask subTask) throws ValidateException {
+    public int createSubTask(SubTask subTask)  {
         if (subTask != null && subTask.getEpicId() > 0) {
         super.createSubTask(subTask);
         save();
