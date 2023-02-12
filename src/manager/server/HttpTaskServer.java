@@ -76,5 +76,11 @@ public class HttpTaskServer {
         private void handleSubtask(HttpExchange exchange) throws IOException {
 
         }
+
+        protected void write(HttpExchange exchange, String text) throws IOException{
+            exchange.getResponseHeaders().add("content-type", "application/json");
+            exchange.sendResponseHeaders(200, 0);
+            exchange.getRequestBody().
+        }
     }
 }
