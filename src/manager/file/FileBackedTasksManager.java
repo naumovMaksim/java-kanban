@@ -1,7 +1,6 @@
 package manager.file;
 
 import exception.ManagerSaveException;
-import manager.Managers;
 import manager.inMemory.InMemoryTaskManager;
 import manager.interfaces.TaskManager;
 import tasks.Epic;
@@ -23,16 +22,16 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         fileBackedTasksManager.createTask(new Task("Ноутбук", Type.TASK,
                 "Купить новый ноутбук", StatusTypeEnum.NEW,
-                LocalDateTime.of(2023,2,3,10, 0), 5));
+                LocalDateTime.of(2023, 2, 3, 10, 0), 5));
         fileBackedTasksManager.createTask(new Task("Кот", Type.TASK,
                 "Покормить кота", StatusTypeEnum.DONE,
-                LocalDateTime.of(2023,2,3,11, 0), 5));
+                LocalDateTime.of(2023, 2, 3, 11, 0), 5));
         fileBackedTasksManager.createEpic(new Epic("Продукты", Type.EPIC,
                 "Купить продукты", StatusTypeEnum.NEW,
-                LocalDateTime.of(2023,2,3,12, 0), 5));
+                LocalDateTime.of(2023, 2, 3, 12, 0), 5));
         fileBackedTasksManager.createSubTask(new SubTask("Пойти в магазин", Type.SUB_TASK,
                 "Купить все в магазине", StatusTypeEnum.NEW, 3,
-                LocalDateTime.of(2023,2,3,13, 0), 5));
+                LocalDateTime.of(2023, 2, 3, 13, 0), 5));
 
         fileBackedTasksManager.getTaskById(1);
         fileBackedTasksManager.getTaskById(2);
@@ -106,7 +105,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public static FileBackedTasksManager loadFromFile(File file) {
-        final FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
+        final FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager();
         try {
             final String csv = Files.readString(file.toPath());
             final String[] lines = csv.split(System.lineSeparator());
@@ -146,11 +145,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public int createTask(Task task)   {
+    public int createTask(Task task) {
         if (task != null) {
-        super.createTask(task);
-        save();
-        return task.getId();
+            super.createTask(task);
+            save();
+            return task.getId();
         } else {
             return -1;
         }
@@ -168,11 +167,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public int createSubTask(SubTask subTask)  {
+    public int createSubTask(SubTask subTask) {
         if (subTask != null && subTask.getEpicId() > 0) {
-        super.createSubTask(subTask);
-        save();
-        return subTask.getId();
+            super.createSubTask(subTask);
+            save();
+            return subTask.getId();
         } else {
             return -1;
         }

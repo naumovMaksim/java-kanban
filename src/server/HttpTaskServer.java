@@ -15,20 +15,26 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Objects;
 
 public class HttpTaskServer {
-    private static HttpServer httpServer;
-    private static FileBackedTasksManager fileBackedTasksManager;
-    private static Gson gson;
+    private final HttpServer httpServer;
+    private final FileBackedTasksManager fileBackedTasksManager;
+    private final Gson gson;
 
     public HttpTaskServer() throws IOException {
         httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
-        fileBackedTasksManager = (FileBackedTasksManager) Managers.getDefault();
+        fileBackedTasksManager = Managers.FileBackedTasksManager();
         gson = new Gson();
         httpServer.createContext("/tasks", new Handler());
     }
 
-    static class Handler implements HttpHandler {
+    public void serverStart() {
+        System.out.println("Запуск сервера...");
+        httpServer.start();
+    }
+
+    class Handler implements HttpHandler {
 
         @Override
         public void handle(HttpExchange exchange) {
@@ -53,8 +59,6 @@ public class HttpTaskServer {
                 }
             } catch (IOException e) {
                 System.out.println("Ошибка при обработке запроса");
-            } finally {
-                exchange.close();
             }
         }
 
@@ -63,7 +67,7 @@ public class HttpTaskServer {
             String body = new String(exchange.getRequestBody().readAllBytes(), Charset.defaultCharset());
             switch (method) {
                 case "GET":
-                    if (!exchange.getRequestURI().getQuery().isEmpty()) {
+                    if (Objects.nonNull(exchange.getRequestURI().getQuery())) {
                         String idS = exchange.getRequestURI().getQuery().substring(3);
                         int id = Integer.parseInt(idS);
                         Task task1 = fileBackedTasksManager.getTaskById(id);
@@ -85,7 +89,7 @@ public class HttpTaskServer {
                     }
                     return;
                 case "DELETE":
-                    if (!exchange.getRequestURI().getQuery().isEmpty()) {
+                    if (Objects.nonNull(exchange.getRequestURI().getQuery())) {
                         String idS = exchange.getRequestURI().getQuery().substring(3);
                         int id = Integer.parseInt(idS);
                         fileBackedTasksManager.deleteTaskById(id);
@@ -102,7 +106,7 @@ public class HttpTaskServer {
             String body = new String(exchange.getRequestBody().readAllBytes(), Charset.defaultCharset());
             switch (method) {
                 case "GET":
-                    if (!exchange.getRequestURI().getQuery().isEmpty()) {
+                    if (Objects.nonNull(exchange.getRequestURI().getQuery())) {
                         String idS = exchange.getRequestURI().getQuery().substring(3);
                         int id = Integer.parseInt(idS);
                         Epic epic = fileBackedTasksManager.getEpicById(id);
@@ -116,7 +120,7 @@ public class HttpTaskServer {
                     }
                 case "POST":
                     try {
-                       Epic epic = gson.fromJson(body, Epic.class);
+                        Epic epic = gson.fromJson(body, Epic.class);
                         fileBackedTasksManager.createEpic(epic);
                         exchange.sendResponseHeaders(200, 0);
                     } catch (NullPointerException e) {
@@ -124,7 +128,7 @@ public class HttpTaskServer {
                     }
                     return;
                 case "DELETE":
-                    if (!exchange.getRequestURI().getQuery().isEmpty()) {
+                    if (Objects.nonNull(exchange.getRequestURI().getQuery())) {
                         String idS = exchange.getRequestURI().getQuery().substring(3);
                         int id = Integer.parseInt(idS);
                         fileBackedTasksManager.deleteEpicById(id);
@@ -141,7 +145,7 @@ public class HttpTaskServer {
             String body = new String(exchange.getRequestBody().readAllBytes(), Charset.defaultCharset());
             switch (method) {
                 case "GET":
-                    if (!exchange.getRequestURI().getQuery().isEmpty()) {
+                    if (Objects.nonNull(exchange.getRequestURI().getQuery())) {
                         String idS = exchange.getRequestURI().getQuery().substring(3);
                         int id = Integer.parseInt(idS);
                         SubTask subTask = fileBackedTasksManager.getSubTaskById(id);
@@ -163,7 +167,7 @@ public class HttpTaskServer {
                     }
                     return;
                 case "DELETE":
-                    if (!exchange.getRequestURI().getQuery().isEmpty()) {
+                    if (Objects.nonNull(exchange.getRequestURI().getQuery())) {
                         String idS = exchange.getRequestURI().getQuery().substring(3);
                         int id = Integer.parseInt(idS);
                         fileBackedTasksManager.deleteSubTaskById(id);
@@ -196,11 +200,6 @@ public class HttpTaskServer {
                     os.write(bytes);
                 }
             }
-        }
-
-        public void serverStart() {
-            System.out.println("Запуск сервера...");
-            httpServer.start();
         }
 
         public void serverStop() {

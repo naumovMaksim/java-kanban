@@ -1,5 +1,8 @@
 import manager.*;
+import manager.file.FileBackedTasksManager;
 import manager.interfaces.TaskManager;
+import server.HttpTaskManager;
+import server.HttpTaskServer;
 import server.KVServer;
 import server.KVTaskClient;
 import tasks.*;
@@ -12,14 +15,15 @@ import java.time.LocalDateTime;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-//        TaskManager inMemoryTaskManager = Managers.getDefault();
-
-        KVServer kvServer = new KVServer();
+        KVServer kvServer = Managers.getKVserver();
         kvServer.start();
-        KVTaskClient kvTaskClient = new KVTaskClient(8080);
+        HttpTaskManager httpTaskManager = Managers.getDefault();
 
         Task task = new Task("Ноутбук", Type.TASK, "Купить новый ноутбук", StatusTypeEnum.NEW,
                 LocalDateTime.of(2023,2,3,10, 0), 5);
+        httpTaskManager.createTask(task);
+        httpTaskManager.saveFile();
+//        httpTaskManager.loadFile();
 
 //        Task task1 = new Task("Квартира", Type.TASK,"Купить новую квартиру", StatusTypeEnum.NEW,
 //                LocalDateTime.of(2023,2,3,10, 0), 3);

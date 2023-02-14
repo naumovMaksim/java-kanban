@@ -20,7 +20,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     @BeforeEach
     void beforeEach() {
         file = new File("resources/testFiles/fileWithTest.csv");
-        manager = new FileBackedTasksManager(file);
+        manager = new FileBackedTasksManager();
         tasksCreation();
     }
 
@@ -76,7 +76,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         manager.deleteAllSubTasks();
         final ManagerSaveException exception = assertThrows(ManagerSaveException.class,
                 () -> {
-                    FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(Path.of("").toFile());
+                    FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager();
                     fileBackedTasksManager.save();
                 });
         assertEquals(" (Невозможно создать файл, так как он уже существует)", exception.getMessage());

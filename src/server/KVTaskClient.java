@@ -30,6 +30,7 @@ public class KVTaskClient {
             return e.getMessage();
         }
     }
+
     public void put(String k, String json) {
         try {
             HttpClient client = HttpClient.newHttpClient();
@@ -58,7 +59,7 @@ public class KVTaskClient {
                 throw new RuntimeException("Ошибка");
             }
             return response.body();
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return "Ошибка";
         }

@@ -8,12 +8,20 @@ import server.HttpTaskManager;
 import server.KVServer;
 
 import java.io.File;
+import java.io.IOException;
 
 
 public class Managers {
-    public static TaskManager getDefault() {
+    public static HttpTaskManager getDefault() {
         return new HttpTaskManager(KVServer.PORT);
-        //return new FileBackedTasksManager(new File("resources/testReport.csv"));
+    }
+
+    public static KVServer getKVserver() throws IOException {
+        return new KVServer();
+    }
+
+    public static FileBackedTasksManager FileBackedTasksManager() {
+        return new FileBackedTasksManager();
     }
 
     public static HistoryManager getDefaultHistory() {
