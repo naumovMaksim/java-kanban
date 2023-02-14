@@ -19,7 +19,7 @@ import java.util.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
     public static void main(String[] args) {
-        TaskManager fileBackedTasksManager = Managers.getDefault();
+        TaskManager fileBackedTasksManager = new FileBackedTasksManager();
 
         fileBackedTasksManager.createTask(new Task("Ноутбук", Type.TASK,
                 "Купить новый ноутбук", StatusTypeEnum.NEW,
@@ -79,12 +79,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 //                fileBackedTasksManager2.getAllSubTasks());
     }
 
-    private final File file;
-
-    public FileBackedTasksManager(File file) {
-        super();
-        this.file = file;
-    }
+    private final File file = new File("resources/testReport.csv");
 
     public void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {

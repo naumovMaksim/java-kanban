@@ -1,47 +1,55 @@
 import manager.*;
 import manager.interfaces.TaskManager;
+import server.KVServer;
+import server.KVTaskClient;
 import tasks.*;
 import tasks.enums.StatusTypeEnum;
 import tasks.enums.Type;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class Main {
 
-    public static void main(String[] args)  {
-        TaskManager inMemoryTaskManager = Managers.getDefault();
+    public static void main(String[] args) throws IOException {
+//        TaskManager inMemoryTaskManager = Managers.getDefault();
+
+        KVServer kvServer = new KVServer();
+        kvServer.start();
+        KVTaskClient kvTaskClient = new KVTaskClient(8080);
 
         Task task = new Task("Ноутбук", Type.TASK, "Купить новый ноутбук", StatusTypeEnum.NEW,
                 LocalDateTime.of(2023,2,3,10, 0), 5);
-        Task task1 = new Task("Квартира", Type.TASK,"Купить новую квартиру", StatusTypeEnum.NEW,
-                LocalDateTime.of(2023,2,3,10, 0), 3);
-        Epic epic = new Epic("Продукты", Type.EPIC, "Купить продукты", StatusTypeEnum.NEW,
-                LocalDateTime.of(2023,2,3,10, 0), 0);
-        Epic epic1 = new Epic("Проект", Type.EPIC, "Сделать проект", StatusTypeEnum.NEW,
-                LocalDateTime.of(2023,2,3,10, 0), 0);
-        SubTask subTask = new SubTask("Составить список",
-                Type.SUB_TASK, "Добавить в список все продукты", StatusTypeEnum.NEW, 2,
-                LocalDateTime.of(2023,2,3,10, 0), 4);
-        SubTask subTask1 = new SubTask("Изучить теорию",
-                Type.SUB_TASK,"Подготовить проект к 1 проверке", StatusTypeEnum.NEW, 1,
-                LocalDateTime.of(2023,2,3,10, 0), 2);
-        SubTask subTask2 = new SubTask("Пойти в магазин",
-                Type.SUB_TASK, "Купить все в магазине", StatusTypeEnum.NEW, 4,
-                LocalDateTime.of(2023,2,3,10, 0), 100);
 
-        inMemoryTaskManager.createTask(task);
-        inMemoryTaskManager.createTask(task1);
-        inMemoryTaskManager.createEpic(epic);
-        inMemoryTaskManager.createEpic(epic1);
-        inMemoryTaskManager.createSubTask(subTask);
-        inMemoryTaskManager.createSubTask(subTask1);
-        inMemoryTaskManager.createSubTask(subTask2);
+//        Task task1 = new Task("Квартира", Type.TASK,"Купить новую квартиру", StatusTypeEnum.NEW,
+//                LocalDateTime.of(2023,2,3,10, 0), 3);
+//        Epic epic = new Epic("Продукты", Type.EPIC, "Купить продукты", StatusTypeEnum.NEW,
+//                LocalDateTime.of(2023,2,3,10, 0), 0);
+//        Epic epic1 = new Epic("Проект", Type.EPIC, "Сделать проект", StatusTypeEnum.NEW,
+//                LocalDateTime.of(2023,2,3,10, 0), 0);
+//        SubTask subTask = new SubTask("Составить список",
+//                Type.SUB_TASK, "Добавить в список все продукты", StatusTypeEnum.NEW, 2,
+//                LocalDateTime.of(2023,2,3,10, 0), 4);
+//        SubTask subTask1 = new SubTask("Изучить теорию",
+//                Type.SUB_TASK,"Подготовить проект к 1 проверке", StatusTypeEnum.NEW, 1,
+//                LocalDateTime.of(2023,2,3,10, 0), 2);
+//        SubTask subTask2 = new SubTask("Пойти в магазин",
+//                Type.SUB_TASK, "Купить все в магазине", StatusTypeEnum.NEW, 4,
+//                LocalDateTime.of(2023,2,3,10, 0), 100);
 
-
-
-
-        System.out.println("1 проверка:" + "\n" + inMemoryTaskManager.getAllTasks() + "\n" + inMemoryTaskManager.getAllEpics()
-                + "\n" + inMemoryTaskManager.getAllSubTasks() + "\n");
+//        inMemoryTaskManager.createTask(task);
+//        inMemoryTaskManager.createTask(task1);
+//        inMemoryTaskManager.createEpic(epic);
+//        inMemoryTaskManager.createEpic(epic1);
+//        inMemoryTaskManager.createSubTask(subTask);
+//        inMemoryTaskManager.createSubTask(subTask1);
+//        inMemoryTaskManager.createSubTask(subTask2);
+//
+//
+//
+//
+//        System.out.println("1 проверка:" + "\n" + inMemoryTaskManager.getAllTasks() + "\n" + inMemoryTaskManager.getAllEpics()
+//                + "\n" + inMemoryTaskManager.getAllSubTasks() + "\n");
 
 //        subTask.setTaskStatus(StatusTypeEnum.DONE);
 //        inMemoryTaskManager.updateSubTask(subTask);
@@ -95,7 +103,7 @@ public class Main {
 //        inMemoryTaskManager.deleteEpicById(3);
 //
 //        System.out.println("4 Проверка вывода истории:" + "\n" + inMemoryTaskManager.getHistory());
-
-        System.out.println("1 проверка временного вывода: " + inMemoryTaskManager.getprioritizedTaskss());
+//
+//        System.out.println("1 проверка временного вывода: " + inMemoryTaskManager.getprioritizedTaskss());
     }
 }
