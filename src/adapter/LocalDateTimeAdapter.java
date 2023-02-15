@@ -10,11 +10,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
-
+    private static final DateTimeFormatter formatterWriter = DateTimeFormatter.ofPattern("yyyy-MM-DDTHH:mm");
     @Override
     public void write(JsonWriter jsonWriter, LocalDateTime localDateTime) throws IOException {
-        LocalDateTime time = Objects.nonNull(localDateTime) ? localDateTime : LocalDateTime.now();
-        jsonWriter.value(time.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        jsonWriter.value(localDateTime.format(formatterWriter));
     }
 
     @Override

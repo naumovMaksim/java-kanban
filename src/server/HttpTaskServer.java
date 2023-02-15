@@ -1,6 +1,8 @@
 package server;
 
+import adapter.LocalDateTimeAdapter;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -26,7 +28,7 @@ public class HttpTaskServer {
     public HttpTaskServer() throws IOException {
         httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
         fileBackedTasksManager = Managers.FileBackedTasksManager();
-        gson = new Gson();
+        gson = new GsonBuilder().registerTypeAdapter(LocalDateTimeAdapter.class, new LocalDateTimeAdapter()).create();
         httpServer.createContext("/tasks", new Handler());
     }
 

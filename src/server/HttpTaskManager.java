@@ -1,6 +1,8 @@
 package server;
 
+import adapter.LocalDateTimeAdapter;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import manager.file.FileBackedTasksManager;
 import tasks.Epic;
 import tasks.SubTask;
@@ -17,7 +19,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
 
     public HttpTaskManager(int port) {
         client = new KVTaskClient(port);
-        gson = new Gson();
+        gson = new GsonBuilder().registerTypeAdapter(LocalDateTimeAdapter.class, new LocalDateTimeAdapter()).create();
     }
 
     public void loadFile() {
