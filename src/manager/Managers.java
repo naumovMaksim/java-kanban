@@ -3,11 +3,9 @@ package manager;
 import manager.file.FileBackedTasksManager;
 import manager.inMemory.*;
 import manager.interfaces.HistoryManager;
-import manager.interfaces.TaskManager;
-import server.HttpTaskManager;
+import manager.http.HttpTaskManager;
 import server.KVServer;
 
-import java.io.File;
 import java.io.IOException;
 
 

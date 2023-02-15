@@ -1,5 +1,5 @@
 import manager.*;
-import server.HttpTaskManager;
+import manager.http.HttpTaskManager;
 import server.KVServer;
 import tasks.*;
 import tasks.enums.StatusTypeEnum;
@@ -18,9 +18,16 @@ public class Main {
         Task task = new Task("Ноутбук", Type.TASK, "Купить новый ноутбук", StatusTypeEnum.NEW,
                 LocalDateTime.of(2023,2,3,10, 0), 5);
         httpTaskManager.createTask(task);
+        Epic epic = new Epic("Продукты", Type.EPIC, "Купить продукты", StatusTypeEnum.NEW,
+                LocalDateTime.of(2023,2,3,10, 0), 0);
+        httpTaskManager.createEpic(epic);
+        SubTask subTask = new SubTask("Составить список", Type.SUB_TASK, "Добавить в список все продукты", StatusTypeEnum.NEW, 2,
+                LocalDateTime.of(2023,2,3,11, 0), 4);
+        httpTaskManager.createSubTask(subTask);
+
 
         httpTaskManager.saveFile();
-//        httpTaskManager.loadFile();
+        httpTaskManager.loadFile();
 
 //        Task task1 = new Task("Квартира", Type.TASK,"Купить новую квартиру", StatusTypeEnum.NEW,
 //                LocalDateTime.of(2023,2,3,10, 0), 3);

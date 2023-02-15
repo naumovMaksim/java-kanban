@@ -1,10 +1,11 @@
-package server;
+package manager.http;
 
 import adapter.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import manager.file.FileBackedTasksManager;
+import manager.client.KVTaskClient;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
@@ -26,7 +27,6 @@ public class HttpTaskManager extends FileBackedTasksManager {
     public void loadFile() {
         Type tasksType = new TypeToken<ArrayList<Task>>() {
         }.getType();
-
         ArrayList<Task> tasks = gson.fromJson(client.load("tasks"), tasksType);
         if (Objects.nonNull(tasks)) {
             for (Task task : tasks) {
@@ -38,7 +38,10 @@ public class HttpTaskManager extends FileBackedTasksManager {
                 }
             }
         }
-        ArrayList<Epic> epics = gson.fromJson(client.load("tasks"), (Type) Epic.class);
+
+        Type epicsType = new TypeToken<ArrayList<Epic>>() {
+        }.getType();
+        ArrayList<Epic> epics = gson.fromJson(client.load("tasks"), epicsType);
         if (Objects.nonNull(epics)) {
             for (Epic epic : epics) {
                 int id = epic.getId();
@@ -48,7 +51,10 @@ public class HttpTaskManager extends FileBackedTasksManager {
                 }
             }
         }
-        ArrayList<SubTask> subTasks = gson.fromJson(client.load("tasks"), (Type) SubTask.class);
+
+        Type subtasksType = new TypeToken<ArrayList<SubTask>>() {
+        }.getType();
+        ArrayList<SubTask> subTasks = gson.fromJson(client.load("tasks"), subtasksType);
         if (Objects.nonNull(subTasks)) {
             for (SubTask subTask : subTasks) {
                 int id = subTask.getId();

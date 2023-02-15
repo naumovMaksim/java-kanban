@@ -1,4 +1,4 @@
-package server;
+package manager.client;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -51,7 +51,7 @@ public class KVTaskClient {
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url + "/save/" + k + "?API_TOKEN=" + token))
+                    .uri(URI.create(url + "/load/" + k + "?API_TOKEN=" + token))
                     .GET()
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());

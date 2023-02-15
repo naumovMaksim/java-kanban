@@ -29,13 +29,14 @@ public class KVServer {
     private void load(HttpExchange h) throws IOException {
 
         try {
+            System.out.println("\n/load");
             if (!hasAuth(h)) {
                 System.out.println("Запрос не авторизован, нужен параметр в query API_TOKEN со значением апи-ключа");
                 h.sendResponseHeaders(403, 0);
                 return;
             }
             if (h.getRequestMethod().equals("GET")) {
-                String k = h.getRequestURI().getPath().substring("/load".length());
+                String k = h.getRequestURI().getPath().substring("/load/".length());
                 if (k.isEmpty()) {
                     System.out.println("Key для сохранения пустой. key указывается в пути: /save/{key}");
                     h.sendResponseHeaders(400, 0);
@@ -47,7 +48,7 @@ public class KVServer {
                     return;
                 }
                 sendText(h, data.get(k));
-                System.out.println("Значение отправлено");
+                System.out.println("Значение для ключа " + k + " успешно обновлено!");
                 h.sendResponseHeaders(200, 0);
             } else {
                 System.out.println("/save ждёт POST-запрос, а получил: " + h.getRequestMethod());
@@ -110,6 +111,11 @@ public class KVServer {
         System.out.println("Открой в браузере http://localhost:" + PORT + "/");
         System.out.println("API_TOKEN: " + apiToken);
         server.start();
+    }
+
+    public void stop() {
+        server.stop(1);
+        System.out.println("Сервер остановлен");
     }
 
     private String generateApiToken() {

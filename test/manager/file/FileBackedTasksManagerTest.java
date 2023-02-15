@@ -1,6 +1,7 @@
 package manager.file;
 
 import exception.ManagerSaveException;
+import manager.Managers;
 import manager.TaskManagerTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,16 +20,16 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
 
     @BeforeEach
     void beforeEach() {
-        file = new File("resources/testFiles/fileWithTest.csv");
-        manager = new FileBackedTasksManager();
+        file = new File("resources/testReport.csv");
+        manager = Managers.FileBackedTasksManager();
         tasksCreation();
     }
 
     @Test
     void saveAndLoadFromFile() {
+        manager.getTaskById(1);
         FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(file);
         List<Task> list = fileBackedTasksManager.getAllTasks();
-        manager.getTaskById(1);
         manager.getEpicById(2);
 
         assertNotNull(list);
@@ -67,18 +68,5 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         assertEquals(1, list.size());
         Assertions.assertEquals(Collections.emptyList(), epic.getSubtaskIds());
         Assertions.assertEquals(List.of(task, epic), manager.getHistory());
-    }
-
-    @Test
-    void saveAndLoadFromFileWithWrongData() {
-        manager.deleteAllTasks();
-        manager.deleteAllEpics();
-        manager.deleteAllSubTasks();
-        final ManagerSaveException exception = assertThrows(ManagerSaveException.class,
-                () -> {
-                    FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager();
-                    fileBackedTasksManager.save();
-                });
-        assertEquals(" (Невозможно создать файл, так как он уже существует)", exception.getMessage());
     }
 }

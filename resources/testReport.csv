@@ -1,3 +1,6 @@
 id,type,name,status,description,epic
-1,TASK,Ноутбук,NEW,Купить новый ноутбук,,03-02-2023 10:00,5,03-02-2023 10:05
+1,TASK,Task,NEW,description,,03-02-2023 06:00,1,03-02-2023 06:01
+2,EPIC,Epic,NEW,description,,03-02-2023 08:00,1,03-02-2023 08:01
+3,SUB_TASK,SubTask,NEW,description,2,03-02-2023 08:00,1,03-02-2023 08:01
 
+1

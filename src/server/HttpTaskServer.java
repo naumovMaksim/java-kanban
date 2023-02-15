@@ -37,6 +37,11 @@ public class HttpTaskServer {
         httpServer.start();
     }
 
+    public void serverStop() {
+        httpServer.stop(1);
+        System.out.println("Сервер остановлен.");
+    }
+
     class Handler implements HttpHandler {
 
         @Override
@@ -197,11 +202,6 @@ public class HttpTaskServer {
             h.getResponseHeaders().add("Content-Type", "application/json");
             h.sendResponseHeaders(200, resp.length);
             h.getResponseBody().write(resp);
-        }
-
-        public void serverStop() {
-            httpServer.stop(1);
-            System.out.println("Сервер остановлен.");
         }
     }
 }

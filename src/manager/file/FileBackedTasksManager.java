@@ -1,6 +1,7 @@
 package manager.file;
 
 import exception.ManagerSaveException;
+import manager.Managers;
 import manager.inMemory.InMemoryTaskManager;
 import manager.interfaces.TaskManager;
 import tasks.Epic;
@@ -18,7 +19,7 @@ import java.util.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
     public static void main(String[] args) {
-        TaskManager fileBackedTasksManager = new FileBackedTasksManager();
+        TaskManager fileBackedTasksManager = Managers.FileBackedTasksManager();
 
         fileBackedTasksManager.createTask(new Task("Ноутбук", Type.TASK,
                 "Купить новый ноутбук", StatusTypeEnum.NEW,
