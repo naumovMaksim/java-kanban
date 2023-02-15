@@ -11,11 +11,12 @@ import tasks.SubTask;
 import tasks.Task;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Objects;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class HttpTaskServer {
     private final HttpServer httpServer;
@@ -189,17 +190,11 @@ public class HttpTaskServer {
             }
         }
 
-        protected void writeResponse(HttpExchange exchange, String responseString)
-                throws IOException {
-            if (responseString.isBlank()) {
-                exchange.sendResponseHeaders(200, 0);
-            } else {
-                byte[] bytes = responseString.getBytes(Charset.defaultCharset());
-                exchange.sendResponseHeaders(200, bytes.length);
-                try (OutputStream os = exchange.getResponseBody()) {
-                    os.write(bytes);
-                }
-            }
+        protected void writeResponse(HttpExchange h, String text) throws IOException {
+            byte[] resp = text.getBytes(UTF_8);
+            h.getResponseHeaders().add("Content-Type", "application/json");
+            h.sendResponseHeaders(200, resp.length);
+            h.getResponseBody().write(resp);
         }
 
         public void serverStop() {
