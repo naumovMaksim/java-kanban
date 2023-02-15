@@ -3,6 +3,7 @@ package server;
 import adapter.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import manager.file.FileBackedTasksManager;
 import tasks.Epic;
 import tasks.SubTask;
@@ -15,7 +16,7 @@ import java.util.Objects;
 public class HttpTaskManager extends FileBackedTasksManager {
 
     private static KVTaskClient client;
-    private static Gson gson;
+    private final Gson gson;
 
     public HttpTaskManager(int port) {
         client = new KVTaskClient(port);
@@ -23,7 +24,10 @@ public class HttpTaskManager extends FileBackedTasksManager {
     }
 
     public void loadFile() {
-        ArrayList<Task> tasks = gson.fromJson(client.load("tasks"), (Type) Task.class);
+        Type tasksType = new TypeToken<ArrayList<Task>>() {
+        }.getType();
+
+        ArrayList<Task> tasks = gson.fromJson(client.load("tasks"), tasksType);
         if (Objects.nonNull(tasks)) {
             for (Task task : tasks) {
                 int id = task.getId();

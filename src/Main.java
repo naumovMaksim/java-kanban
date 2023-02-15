@@ -1,10 +1,6 @@
 import manager.*;
-import manager.file.FileBackedTasksManager;
-import manager.interfaces.TaskManager;
 import server.HttpTaskManager;
-import server.HttpTaskServer;
 import server.KVServer;
-import server.KVTaskClient;
 import tasks.*;
 import tasks.enums.StatusTypeEnum;
 import tasks.enums.Type;
@@ -22,6 +18,7 @@ public class Main {
         Task task = new Task("Ноутбук", Type.TASK, "Купить новый ноутбук", StatusTypeEnum.NEW,
                 LocalDateTime.of(2023,2,3,10, 0), 5);
         httpTaskManager.createTask(task);
+
         httpTaskManager.saveFile();
 //        httpTaskManager.loadFile();
 
