@@ -261,6 +261,21 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
+    public List<Task> getAllTasks() {
+        return super.getAllTasks();
+    }
+
+    @Override
+    public List<Epic> getAllEpics() {
+        return super.getAllEpics();
+    }
+
+    @Override
+    public List<SubTask> getAllSubTasks() {
+        return super.getAllSubTasks();
+    }
+
+    @Override
     protected void addAnyTask(Task task) {
         super.addAnyTask(task);
     }

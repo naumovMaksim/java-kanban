@@ -22,6 +22,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -70,6 +71,7 @@ class HttpTaskServerTest {
         }.getType();
         List<Task> list = gson.fromJson(response.body(), tasksType);
         assertNotNull(list);
+        assertEquals(List.of(task), list);
     }
 
     @Test
@@ -82,7 +84,7 @@ class HttpTaskServerTest {
         java.lang.reflect.Type tasksType = new TypeToken<ArrayList<Task>>() {
         }.getType();
         List<Task> list = gson.fromJson(response.body(), tasksType);
-        assertNotNull(list);
+
         assertEquals(task, list.get(0));
     }
 }
