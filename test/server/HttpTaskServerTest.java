@@ -38,7 +38,7 @@ class HttpTaskServerTest {
 
     @BeforeEach
     void beforeEach() throws IOException {
-        server = new HttpTaskServer();
+        server = new HttpTaskServer(fileBackedTasksManager);
         fileBackedTasksManager = Managers.FileBackedTasksManager();
 
         task = new Task("Task", Type.TASK, "description", StatusTypeEnum.NEW,

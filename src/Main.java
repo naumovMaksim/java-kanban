@@ -13,7 +13,14 @@ import java.time.LocalDateTime;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-                KVServer kvServer = Managers.getKVserver();
+//        FileBackedTasksManager manager = Managers.FileBackedTasksManager();
+//        HttpTaskServer server = new HttpTaskServer(manager);
+//               Task task = new Task("Ноутбук", Type.TASK, "Купить новый ноутбук", StatusTypeEnum.NEW,
+//                    LocalDateTime.of(2023,2,3,10, 0), 5);
+//               manager.createTask(task);
+//               server.serverStart();
+
+        KVServer kvServer = Managers.getKVserver();
         kvServer.start();
         HttpTaskManager httpTaskManager = Managers.getDefault();
 

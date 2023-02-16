@@ -26,12 +26,8 @@ public class HttpTaskServer {
     private final FileBackedTasksManager fileBackedTasksManager;
     private final Gson gson;
 
-    public HttpTaskServer() throws IOException {
-        this(Managers.getDefaultTaskManager());
-    }
-
-    public HttpTaskServer(TaskManager taskManager) throws IOException {
-        this.fileBackedTasksManager = Managers.FileBackedTasksManager();
+    public HttpTaskServer(FileBackedTasksManager manager) throws IOException {
+        fileBackedTasksManager = manager;
         httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
         gson = new GsonBuilder().registerTypeAdapter(LocalDateTimeAdapter.class, new LocalDateTimeAdapter()).create();
         httpServer.createContext("/tasks", new Handler());
