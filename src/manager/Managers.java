@@ -4,16 +4,12 @@ import manager.file.FileBackedTasksManager;
 import manager.inMemory.*;
 import manager.interfaces.HistoryManager;
 import manager.http.HttpTaskManager;
-import manager.interfaces.TaskManager;
 import server.KVServer;
 
 import java.io.IOException;
 
 
 public class Managers {
-    public static TaskManager getDefaultTaskManager() {
-        return new InMemoryTaskManager();
-    }
     public static HttpTaskManager getDefault() {
         return new HttpTaskManager(KVServer.PORT);
     }

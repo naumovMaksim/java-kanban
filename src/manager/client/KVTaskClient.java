@@ -1,5 +1,7 @@
 package manager.client;
 
+import exception.KvManagerSaveException;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -23,11 +25,11 @@ public class KVTaskClient {
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Ошибка");
+                throw new KvManagerSaveException("Can't do save request, status code: " + response.statusCode());
             }
             return response.body();
         } catch (Exception e) {
-            return e.getMessage();
+            throw new KvManagerSaveException("Can't do save request", e);
         }
     }
 
@@ -40,10 +42,10 @@ public class KVTaskClient {
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Ошибка");
+                throw new KvManagerSaveException("Can't do save request, status code: " + response.statusCode());
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw new KvManagerSaveException("Can't do save request", e);
         }
     }
 
@@ -56,12 +58,11 @@ public class KVTaskClient {
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Ошибка");
+                throw new KvManagerSaveException("Can't do load request, status code: " + response.statusCode());
             }
             return response.body();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return "Ошибка";
+            throw new KvManagerSaveException("Can't do load request", e);
         }
     }
 }

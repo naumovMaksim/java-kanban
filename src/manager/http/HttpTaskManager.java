@@ -10,9 +10,10 @@ import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
 
-import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class HttpTaskManager extends FileBackedTasksManager {
 
@@ -21,49 +22,23 @@ public class HttpTaskManager extends FileBackedTasksManager {
 
     public HttpTaskManager(int port) {
         client = new KVTaskClient(port);
-        gson = new GsonBuilder().registerTypeAdapter(LocalDateTimeAdapter.class, new LocalDateTimeAdapter()).create();
+        gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
     }
 
     public void loadFile() {
-        Type tasksType = new TypeToken<ArrayList<Task>>() {
-        }.getType();
-        ArrayList<Task> tasks = gson.fromJson(client.load("tasks"), tasksType);
-        if (Objects.nonNull(tasks)) {
-            for (Task task : tasks) {
-                int id = task.getId();
-                this.tasksMemory.put(id, task);
-                this.prioritizedTasks.add(task);
-                if (id > this.id) {
-                    this.id = id;
-                }
-            }
-        }
-
-        Type epicsType = new TypeToken<ArrayList<Epic>>() {
-        }.getType();
-        ArrayList<Epic> epics = gson.fromJson(client.load("tasks"), epicsType);
-        if (Objects.nonNull(epics)) {
-            for (Epic epic : epics) {
-                int id = epic.getId();
-                this.epicsMemory.put(id, epic);
-                if (id > this.id) {
-                    this.id = id;
-                }
-            }
-        }
-
-        Type subtasksType = new TypeToken<ArrayList<SubTask>>() {
-        }.getType();
-        ArrayList<SubTask> subTasks = gson.fromJson(client.load("tasks"), subtasksType);
-        if (Objects.nonNull(subTasks)) {
-            for (SubTask subTask : subTasks) {
-                int id = subTask.getId();
-                this.subTasksMemory.put(id, subTask);
-                this.prioritizedTasks.add(subTask);
-                if (id > this.id) {
-                    this.id = id;
-                }
-            }
+        ArrayList<Task> tasks = gson.fromJson(client.load("tasks"), new TypeToken<ArrayList<Task>>() {
+        }.getType());
+        addTasks(tasks);
+        ArrayList<Epic> epics = gson.fromJson(client.load("epics"), new TypeToken<ArrayList<Epic>>() {
+        }.getType());
+        addTasks(epics);
+        ArrayList<SubTask> subtasks = gson.fromJson(client.load("subtasks"), new TypeToken<ArrayList<SubTask>>() {
+        }.getType());
+        addTasks(subtasks);
+        List<Integer> history = gson.fromJson(client.load("history"), new TypeToken<ArrayList<Integer>>() {
+        }.getType());
+        for (Integer taskId : history) {
+            getHistoryManager().add(findTask(taskId));
         }
     }
 
@@ -77,7 +52,8 @@ public class HttpTaskManager extends FileBackedTasksManager {
         String subtasksJson = gson.toJson(getAllSubTasks());
         client.put("subtasks", subtasksJson);
 
-        String historyJson = gson.toJson(getHistory());
+        String historyJson = gson.toJson(getHistoryManager().getHistory().stream()
+                .map(Task::getId).collect(Collectors.toList()));
         client.put("history", historyJson);
     }
 }

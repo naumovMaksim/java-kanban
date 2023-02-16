@@ -278,15 +278,9 @@ public class InMemoryTaskManager implements TaskManager {
         final int id = task.getId();
 
         switch (task.getType()) {
-            case TASK:
-                tasksMemory.put(id, task);
-                break;
-            case SUB_TASK:
-                subTasksMemory.put(id, (SubTask) task);
-                break;
-            case EPIC:
-                epicsMemory.put(id, (Epic) task);
-                break;
+            case TASK -> tasksMemory.put(id, task);
+            case SUB_TASK -> subTasksMemory.put(id, (SubTask) task);
+            case EPIC -> epicsMemory.put(id, (Epic) task);
         }
     }
 
@@ -368,6 +362,24 @@ public class InMemoryTaskManager implements TaskManager {
                 epicDuration += subTask.getDuration();
             }
             epic.setDuration(epicDuration);
+        }
+    }
+    protected void addTasks(List<? extends Task> tasks) {
+        for (Task task : tasks) {
+            final int id = task.getId();
+            if (id > this.id) {
+                this.id = id;
+            }
+            Type type = task.getType();
+            if (type == Type.TASK) {
+                this.tasksMemory.put(id, task);
+                prioritizedTasks.add(task);
+            } else if (type == Type.SUB_TASK) {
+                subTasksMemory.put(id, (SubTask) task);
+                prioritizedTasks.add(task);
+            } else if (type == Type.EPIC) {
+                epicsMemory.put(id, (Epic) task);
+            }
         }
     }
 }
